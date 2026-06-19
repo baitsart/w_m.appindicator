@@ -17,7 +17,7 @@ rec -r 16000 -c 1 -t flac  /tmp/grabacion.flac 2>&1 | awk -vRS="\r" '$1 ~ /In/ {
 # | notify-send -i "/usr/share/icons/hicolor/48x48/apps/audio-recorder-on.png" " Recording..." 
 pacmd set-source-port "$microphe_port" 'analog-input-microphone-internal'
 
-key="AIzaSyBOti4mM-6x9WDnZIjIeyEU21OpBXqWBgw"
+key="ENTER-YOUR-KEY"
 curl -s -X POST \
 --data-binary @/tmp/grabacion.flac \
 --header 'Content-Type: audio/x-flac; rate=16000;' \
