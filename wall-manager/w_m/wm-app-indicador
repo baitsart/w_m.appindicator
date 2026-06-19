@@ -1,0 +1,1179 @@
+#!/usr/bin/env python3
+#-*- coding: utf-8 -*-     
+#----------------------------------------------------------------------#
+#                         * wallpaper-manger *                         #
+#----------------------------------------------------------------------#
+#    Multi functional application to manage your desktop background    #
+#----------------------------------------------------------------------#
+#								       #
+# GNU License. You are free to modify and redistribute	               #
+# by Rodrigo Esteves baitsart@gmail.com www.youtube.com/user/baitsart  #
+#----------------------------------------------------------------------#
+
+import gi
+gi.require_version('Gtk', '3.0')
+gi.require_version('AyatanaAppIndicator3', '0.1')
+
+from gi.repository import Gtk, AyatanaAppIndicator3 as appindicator
+import subprocess
+import os
+import sys
+
+ACTIONS = {
+"Change wallpaper": "sh /usr/share/wallpaper_manager/w_m/actions/image.sh ",
+"Previous image": "sh /usr/share/wallpaper_manager/w_m/actions/prev.sh ",
+"Next image": "sh /usr/share/wallpaper_manager/w_m/actions/prev-next.sh ",
+"Save on Favorites": "sh /usr/share/wallpaper_manager/w_m/actions/guarda.sh ",
+"Put of Favorites": "sh /usr/share/wallpaper_manager/w_m/actions/image-buenas.sh ",
+"List Favorites": "sh /usr/share/wallpaper_manager/w_m/actions/listar.sh ",
+"Favorites viewer": "sh /usr/share/wallpaper_manager/w_m/actions/view-favorits.sh ",
+"Xml of Favorites": "sh /usr/share/wallpaper_manager/w_m/actions/xml_buenos_backgrounds.sh ",
+"Remove of Favorites": "sh /usr/share/wallpaper_manager/w_m/actions/elimina.sh ",
+"Edit of Favorites": "gnome-text-editor ~/.wallpaper_manager/buenas_imagenes ",
+"By date, favorites": "sh /usr/share/wallpaper_manager/w_m/actions/por_fecha_fav.sh ",
+"Save on categories": "sh /usr/share/wallpaper_manager/w_m/categ_actions/guardar-en-tags.sh ",
+"Put of categories": "sh /usr/share/wallpaper_manager/w_m/categ_actions/lanzar-tags.sh ",
+"List categories": "sh /usr/share/wallpaper_manager/w_m/categ_actions/listar_tags.sh ",
+"Categories viewer": "sh /usr/share/wallpaper_manager/w_m/categ_actions/ver_tags.sh ",
+"Xml of categories": "sh /usr/share/wallpaper_manager/w_m/categ_actions/ver_xml.sh ",
+"Remove of categories": "sh /usr/share/wallpaper_manager/w_m/categ_actions/elimina_de_tag.sh ",
+"Edit of categories": "sh /usr/share/wallpaper_manager/w_m/actions/edit-all-fav.sh ",
+"By date, categories": "sh /usr/share/wallpaper_manager/w_m/categ_actions/ver_por_fecha.sh ",
+"My personal tags": "sh /usr/share/wallpaper_manager/w_m/categ_actions/mis_categ/opc_mis_tags.sh ",
+"List History": "sh /usr/share/wallpaper_manager/w_m/actions/historial.sh ",
+"History viewer": "python3 /usr/share/wallpaper_manager/w_m/actions/wallpaper-gallery.py",
+"include in history": "sh /usr/share/wallpaper_manager/w_m/actions/ir-prev.sh ",
+"Edit history list": "gnome-text-editor ~/.wallpaper_manager/historial ",
+"Data by date": "sh /usr/share/wallpaper_manager/w_m/actions/por_fecha.sh ",
+"Save on Special image": "sh /usr/share/wallpaper_manager/w_m/actions/guarda-special.sh ",
+"Put Special image": "sh /usr/share/wallpaper_manager/w_m/actions/image-especial.sh ",
+"List Special images": "sh /usr/share/wallpaper_manager/w_m/actions/listar-special.sh ",
+"Remove from Specials": "sh /usr/share/wallpaper_manager/w_m/actions/elimina-special.sh ",
+"Put of All images": "sh /usr/share/wallpaper_manager/w_m/actions/lanzar-all-fav.sh ",
+"View All images": "sh /usr/share/wallpaper_manager/w_m/actions/ver-all-fav.sh ",
+"Xml of All images": "sh /usr/share/wallpaper_manager/w_m/actions/xml-all-fav.sh ",
+"Put on grub2": "sh /usr/share/wallpaper_manager/w_m/actions/wallpaper-grub.sh ",
+"Open image...": "sh /usr/share/wallpaper_manager/w_m/actions/open_file.sh ",
+"Open folder to xml": "sh /usr/share/wallpaper_manager/w_m/actions/open_folder_xml.sh ",
+"Same folder image": "sh /usr/share/wallpaper_manager/w_m/actions/lanzar-folder.sh ",
+"In this folder, previous": "sh /usr/share/wallpaper_manager/w_m/actions/same_fold_prev_next.sh prev ",
+"In this folder, next": "sh /usr/share/wallpaper_manager/w_m/actions/same_fold_prev_next.sh next ",
+"Same directory image": "sh /usr/share/wallpaper_manager/w_m/actions/lanzar-directory.sh ",
+"Same folder xml": "sh /usr/share/wallpaper_manager/w_m/actions/xml-actual-folder.sh ",
+"Save, or use folders": "sh /usr/share/wallpaper_manager/w_m/actions/saved_folders.sh ",
+"Video Wallpaper": "/bin/bash /usr/share/wallpaper_manager/w_m/actions/Video-Wallpaper ",
+"Nasa wallpaper": "/usr/share/wallpaper_manager/w_m/actions/nasa-wall-en-historial.sh ",
+"Current image of the planet": "/bin/bash /usr/share/wallpaper_manager/w_m/actions/world-wall.sh ",
+"Image from NatGeo": "/bin/bash /usr/share/wallpaper_manager/w_m/actions/nat-geo-pic.sh ",
+"Image from google, by terms": "/bin/bash /usr/share/wallpaper_manager/w_m/actions/wall-from-goolge.sh ",
+"Google search by images": "/bin/bash /usr/share/wallpaper_manager/w_m/actions/search.sh &",
+"Notify current image": "sh /usr/share/wallpaper_manager/w_m/actions/notify-image.sh ",
+"Open place": "sh /usr/share/wallpaper_manager/w_m/actions/open-place.sh ",
+"Slideshows of categories": "sh /usr/share/wallpaper_manager/w_m/actions/slide_tags.sh ",
+"Slideshows of favorites": "sh /usr/share/wallpaper_manager/w_m/actions/slide_fav.sh ",
+"Slideshows of current place": "sh /usr/share/wallpaper_manager/w_m/actions/slide_current.sh ",
+"Open a Slideshows folder": "sh /usr/share/wallpaper_manager/w_m/actions/slide_folder.sh ",
+"Pick color background": "sh /usr/share/wallpaper_manager/w_m/actions/color-back2.sh ",
+"Natural color background": "/usr/share/wallpaper_manager/w_m/actions/color-back1.sh ",
+"Color background 1": "sh /usr/share/wallpaper_manager/w_m/actions/c-b ",
+"Only color background": "gsettings set org.gnome.desktop.background picture-uri-dark file:///~/.wallpaper_manager/colors-list && gsettings set org.gnome.desktop.background picture-uri file:///~/.wallpaper_manager/colors-list && sh /usr/share/wallpaper_manager/w_m/actions/ir-prev.sh",
+"Color to dash panel": "sh /usr/share/wallpaper_manager/w_m/actions/panel_color.sh ",
+"Save to Colors": "sh /usr/share/wallpaper_manager/w_m/actions/color-back-guard.sh ",
+"Colors list": "sh /usr/share/wallpaper_manager/w_m/actions/color-back-list.sh ",
+"Edit colors list": "gnome-text-editor ~/.wallpaper_manager/colors-list ",
+"Pick secondary": "sh /usr/share/wallpaper_manager/w_m/actions/color-back-second.sh ",
+"Save secondary": "sh /usr/share/wallpaper_manager/w_m/actions/color-save-second.sh ",
+"Secondary = Vertical": "gsettings set org.gnome.desktop.background color-shading-type 'vertical'",
+"Secondary = Horizontal": "gsettings set org.gnome.desktop.background color-shading-type 'horizontal'",
+"Secondary = Solido": "gsettings set org.gnome.desktop.background color-shading-type 'solid'",
+"Invert colors": "sh /usr/share/wallpaper_manager/w_m/actions/complementari.sh ",
+"Black and white": "sh /usr/share/wallpaper_manager/w_m/actions/black-and-white.sh ",
+"Write the picture": "sh /usr/share/wallpaper_manager/w_m/actions/text-to-image.sh ",
+"Rotate clock": "sh /usr/share/wallpaper_manager/w_m/actions/rotate-clock.sh ",
+"Rotate anti clock": "sh /usr/share/wallpaper_manager/w_m/actions/rotate-anti-clock.sh ",
+"Rotate invert": "sh /usr/share/wallpaper_manager/w_m/actions/rotate-invert.sh ",
+"Zoom": "gsettings set org.gnome.desktop.background picture-options 'zoom'",
+"Centered": "gsettings set org.gnome.desktop.background picture-options 'centered'",
+"Scaled": "gsettings set org.gnome.desktop.background picture-options 'scaled'",
+"Wallpaper": "gsettings set org.gnome.desktop.background picture-options 'wallpaper'",
+"Stretched": "gsettings set org.gnome.desktop.background picture-options 'stretched'",
+"Deactivate screensaver": "xscreensaver-command --exit && notify-send -i /usr/share/icons/Humanity/apps/48/xscreensaver.svg 'Deactivate..' 'Se ha desactivado el salvapantalla' && gnome-screensaver &",
+"Activate screensaver": "/usr/share/wallpaper_manager/w_m/actions/xscreen_active.sh",
+"Start screensavers": "xscreensaver-command --activate",
+"screensaver prev": "xscreensaver-command --prev",
+"screensaver next": "xscreensaver-command --next",
+"Pick screensaver": "sh /usr/share/wallpaper_manager/w_m/actions/xscreensaver_select.sh",
+"Save on Favorites, xscreen": "sh /usr/share/wallpaper_manager/w_m/actions/xscreen_save.sh",
+"List Favorites, xscreen": "sh /usr/share/wallpaper_manager/w_m/actions/xscreen_list.sh",
+"Preferences": "xscreensaver-command --prefs",
+"Reload": "sh /usr/share/wallpaper_manager/w_m/actions/reload.sh &",
+
+}
+
+
+def menuitem_response(widget, optionName):
+    cmd = ACTIONS.get(optionName)
+    if cmd:
+        subprocess.Popen(cmd, shell=True)
+
+
+def quitApplication(w, optionName):
+        sys.exit(0)
+
+if __name__ == "__main__":
+        icon_path = os.path.expanduser("/usr/share/wallpaper_manager/w_m/iconos/wallpaper-manager.png")
+
+ind = appindicator.Indicator.new(
+    "wallpaper-manager",
+    icon_path,
+    appindicator.IndicatorCategory.APPLICATION_STATUS
+)
+
+
+ind.set_status(appindicator.IndicatorStatus.ACTIVE)
+ind.set_icon_full(icon_path, "Wallpaper Manager")
+
+    # create a menu
+menu = Gtk.Menu()
+
+    # create some drop down options
+
+optionName = "Change wallpaper"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("system-run", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+menu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Previous image"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("go-previous", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+menu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Next image"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("go-next", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+menu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+
+imagesMenu = Gtk.Menu()
+imagesItem = Gtk.ImageMenuItem(label="Menu images  🖼️ ")
+
+menu.append(imagesItem)
+imagesItem.set_submenu(imagesMenu)
+imagesItem.show()
+
+toolsMenu = Gtk.Menu()
+toolsItem = Gtk.ImageMenuItem(label="Menu tools  🔧 ")
+
+menu.append(toolsItem)
+toolsItem.set_submenu(toolsMenu)
+toolsItem.show()
+
+listMenu=Gtk.Menu()
+listItems=Gtk.ImageMenuItem(label="Favorites")
+img = Gtk.Image.new_from_icon_name("emblem-ok", Gtk.IconSize.MENU)
+img.show()
+listItems.set_image(img)
+listItems.set_always_show_image(True)
+
+imagesMenu.append(listItems)
+listItems.set_submenu(listMenu)
+listItems.show()
+
+optionName = "Save on Favorites"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("document-save", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Put of Favorites"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("system-run", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "List Favorites"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("view-list", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Favorites viewer"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("media-playback-start", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Xml of Favorites"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("go-jump", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Remove of Favorites"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("edit-undo", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Edit of Favorites"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("document-edit", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "By date, favorites"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("view-list", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+listItems.show()
+
+listMenu=Gtk.Menu()
+listItems=Gtk.ImageMenuItem(label="Categories")
+img = Gtk.Image.new_from_icon_name("help-about", Gtk.IconSize.MENU)
+img.show()
+listItems.set_image(img)
+listItems.set_always_show_image(True)
+
+imagesMenu.append(listItems)
+listItems.set_submenu(listMenu)
+listItems.show()
+
+optionName = "Save on categories"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("document-save", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Put of categories"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("system-run", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "List categories"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("view-list", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Categories viewer"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("media-playback-start", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Xml of categories"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("go-jump", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Remove of categories"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("edit-undo", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Edit of categories"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("document-edit", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "By date, categories"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("view-list", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "My personal tags"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("emblem-ok", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+listItems.show()
+
+listMenu=Gtk.Menu()
+listItems=Gtk.ImageMenuItem(label="History")
+img = Gtk.Image.new_from_icon_name("view-list", Gtk.IconSize.MENU)
+img.show()
+listItems.set_image(img)
+listItems.set_always_show_image(True)
+
+menu.append(listItems)
+listItems.set_submenu(listMenu)
+listItems.show()
+
+optionName = "List History"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("view-list", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "History viewer"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("media-playback-start", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "include in history"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("document-revert", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Edit history list"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("document-edit", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Data by date"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("view-list", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+listItems.show()
+
+listMenu=Gtk.Menu()
+listItems=Gtk.ImageMenuItem(label="Special image")
+img = Gtk.Image.new_from_icon_name("help-about", Gtk.IconSize.MENU)
+img.show()
+listItems.set_image(img)
+listItems.set_always_show_image(True)
+
+imagesMenu.append(listItems)
+listItems.set_submenu(listMenu)
+listItems.show()
+
+optionName = "Save on Special image"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("document-save", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Put Special image"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("system-run", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "List Special images"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("view-list", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Remove from Specials"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("edit-undo", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+listItems.show()
+
+listMenu=Gtk.Menu()
+listItems=Gtk.ImageMenuItem(label="In this folder")
+img = Gtk.Image.new_from_icon_name("document-open", Gtk.IconSize.MENU)
+img.show()
+listItems.set_image(img)
+listItems.set_always_show_image(True)
+
+menu.append(listItems)
+listItems.set_submenu(listMenu)
+listItems.show()
+
+optionName = "Same folder image"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("system-run", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "In this folder, previous"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("go-previous", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "In this folder, next"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("go-next", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Same directory image"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("system-run", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Same folder xml"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("go-jump", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Save, or use folders"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("document-open", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+listItems.show()
+
+listMenu=Gtk.Menu()
+listItems=Gtk.ImageMenuItem(label="All images")
+img = Gtk.Image.new_from_icon_name("media-floppy", Gtk.IconSize.MENU)
+img.show()
+listItems.set_image(img)
+listItems.set_always_show_image(True)
+
+imagesMenu.append(listItems)
+listItems.set_submenu(listMenu)
+listItems.show()
+
+optionName = "Put of All images"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("system-run", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "View All images"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("media-playback-start", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Xml of All images"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("go-jump", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Put on grub2"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("system-run", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Open image..."
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("document-open", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Open folder to xml"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("document-open", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+
+optionName = "Video Wallpaper"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("media-playback-start", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Nasa wallpaper"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("system-run", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Image from NatGeo"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("go-down", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Image from google, by terms"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("media-playback-start", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Current image of the planet"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("media-skip-forward", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+menu_items.show()
+
+optionName = "Google search by images"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("edit-find", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+listItems.show()
+
+optionName = "Notify current image"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("dialog-information", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+menu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Open place"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("document-open", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+menu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+listMenu=Gtk.Menu()
+listItems=Gtk.ImageMenuItem(label="Slideshows")
+img = Gtk.Image.new_from_icon_name("media-playback-start", Gtk.IconSize.MENU)
+img.show()
+listItems.set_image(img)
+listItems.set_always_show_image(True)
+
+menu.append(listItems)
+listItems.set_submenu(listMenu)
+listItems.show()
+
+optionName = "Slideshows of categories"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("media-playback-start", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Slideshows of favorites"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("media-playback-start", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Slideshows of current place"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("media-playback-start", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Open a Slideshows folder"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("document-open", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+listItems.show()
+
+
+listMenu=Gtk.Menu()
+listItems=Gtk.ImageMenuItem(label="Display Mode")
+img = Gtk.Image.new_from_icon_name(Gtk.STOCK_PAGE_SETUP, Gtk.IconSize.MENU)
+img.show()
+listItems.set_image(img)
+listItems.set_always_show_image(True)
+
+toolsMenu.append(listItems)
+listItems.set_submenu(listMenu)
+listItems.show()
+
+optionName = "Zoom"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("zoom-fit-best", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Centered"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("zoom-in", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Scaled"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("zoom-original", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Wallpaper"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("view-fullscreen", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Stretched"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("view-restore", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+listItems.show()
+
+listMenu=Gtk.Menu()
+listItems=Gtk.ImageMenuItem(label="Color background")
+img = Gtk.Image.new_from_icon_name("color-select", Gtk.IconSize.MENU)
+img.show()
+listItems.set_image(img)
+listItems.set_always_show_image(True)
+
+toolsMenu.append(listItems)
+listItems.set_submenu(listMenu)
+listItems.show()
+
+optionName = "Pick color background"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("color-select", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Natural color background"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("system-run", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Color background 1"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("system-run", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Only color background"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("color-select", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Color to dash panel"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("system-run", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Save to Colors"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("document-save", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Colors list"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("view-list", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Edit colors list"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("document-edit", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Save secondary"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("document-save", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Pick secondary"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("color-select", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Secondary = Vertical"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("preferences-system", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Secondary = Horizontal"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("preferences-system", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Secondary = Solid"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("preferences-system", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+listItems.show()
+
+listMenu=Gtk.Menu()
+listItems=Gtk.ImageMenuItem(label="Image edit")
+img = Gtk.Image.new_from_icon_name("preferences-system", Gtk.IconSize.MENU)
+img.show()
+listItems.set_image(img)
+listItems.set_always_show_image(True)
+
+toolsMenu.append(listItems)
+listItems.set_submenu(listMenu)
+listItems.show()
+
+optionName = "Invert colors"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("color-select", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Black and white"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("system-run", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Write the picture"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("preferences-desktop-font", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Rotate clock"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name(Gtk.STOCK_GOTO_LAST, Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Rotate anti clock"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name(Gtk.STOCK_GOTO_FIRST, Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Rotate invert"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name(Gtk.STOCK_GOTO_TOP, Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+listItems.show()
+
+listMenu=Gtk.Menu()
+listItems=Gtk.ImageMenuItem(label="Xscreensaver")
+img = Gtk.Image.new_from_icon_name("help-about", Gtk.IconSize.MENU)
+img.show()
+listItems.set_image(img)
+listItems.set_always_show_image(True)
+
+toolsMenu.append(listItems)
+listItems.set_submenu(listMenu)
+listItems.show()
+
+optionName = "Deactivate screensaver"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("process-stop", Gtk.IconSize.MENU)
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Activate screensaver"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("emblem-ok", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Start screensavers"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("system-run", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "screensaver prev"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("go-previous", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "screensaver next"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("go-next", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Pick screensaver"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("format-indent-more", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Save on Favorites, xscreen"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("document-save", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "List Favorites, xscreen"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("view-list", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Preferences"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("view-list", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+listMenu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+listItems.show()
+
+
+
+optionName = "Reload"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("view-refresh", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+menu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Quit"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("application-exit", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+menu.append(menu_items)
+menu_items.connect("activate", quitApplication, optionName)
+menu_items.show()
+env = os.environ.copy()
+
+menu.show_all()
+ind.set_menu(menu)
+
+Gtk.main()

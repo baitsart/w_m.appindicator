@@ -1,0 +1,90 @@
+#!/bin/bash
+
+CMD="$1"
+ARG="$2"
+
+if gsettings get org.gnome.desktop.interface color-scheme | grep -q 'prefer-dark'; then 
+    mode="-dark"
+else
+    mode=""
+fi
+
+
+case "$CMD" in
+
+    -h|--h|--help)
+        echo "w-m command line for wallpaper-manager
+w-m [option] [Path/file]
+
+    -a,  -all        Use all files
+    -c,  -color      Use color background
+    -ch, -change     Change picture
+    -d,  -slides     Slideshows
+    -dl, -download   Download images
+    -e,  -edit       Edit image
+    -f,  -fav        Favorites
+    -g,  -get        Get current wallpaper
+    -m,  -visual     Visual mode
+    -na, -nasa       NASA image
+    -ne, -next       Next image
+    -o,  -open       Open folder
+    -p,  -prev       Previous image
+    -r,  -run        Run app indicator
+    -re, -reload     Reload
+    -s,  -set        Set image
+    -t,  -tags       Tags menu
+"
+    ;;
+
+    -run|-r)
+        /usr/bin/env python3 /usr/share/wallpaper_manager/w_m/wm-app-indicador &
+    ;;
+
+    -reload|-re)
+        sh /usr/share/wallpaper_manager/w_m/actions/reload.sh
+    ;;
+
+    -get|-g)
+        image=$(gsettings get org.gnome.desktop.background picture-uri"$mode")
+        echo "$image" | sed 's|file://||g'
+    ;;
+
+    -set|-s)
+        if [ -n "$ARG" ]; then
+            if file "$ARG" | grep -q "image"; then
+                gsettings set org.gnome.desktop.background picture-uri"$mode" "file:///$ARG"
+                sh /usr/share/wallpaper_manager/w_m/actions/ir-prev.sh
+            else
+                notify-send "w-m" "No es una imagen válida"
+            fi
+        else
+            sh /usr/share/wallpaper_manager/w_m/actions/open_file.sh
+        fi
+    ;;
+
+    -next|-ne)
+        sh /usr/share/wallpaper_manager/w_m/actions/prev-next.sh
+    ;;
+
+    -prev|-p)
+        sh /usr/share/wallpaper_manager/w_m/actions/prev.sh
+    ;;
+
+    -tags|-t)
+        sh /usr/share/wallpaper_manager/w_m/categ_actions/opc_tags.sh
+    ;;
+
+    -fav|-f)
+        sh /usr/share/wallpaper_manager/w_m/actions/opc_fav.sh
+    ;;
+
+    -color|-c)
+        sh /usr/share/wallpaper_manager/w_m/actions/color-as-back.sh
+    ;;
+
+    *)
+        echo "\"$CMD\" no es una opción válida"
+        echo "Usá: w-m --help"
+    ;;
+
+esac

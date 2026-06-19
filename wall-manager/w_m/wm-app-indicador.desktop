@@ -1,0 +1,9 @@
+
+[Desktop Entry]
+Type=Application
+Exec=/usr/share/wallpaper_manager/w_m/wm-app-indicador
+Hidden=false
+NoDisplay=false
+X-GNOME-Autostart-enabled=true
+Name=Wallpaper Manager
+Comment=Wallpaper manager indicator

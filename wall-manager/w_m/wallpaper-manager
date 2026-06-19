@@ -1,0 +1,138 @@
+#!/bin/sh
+ir_prev()
+{
+sh /usr/share/wallpaper_manager/w_m/actions/ir-prev.sh
+}
+notif()
+{
+sh /usr/share/wallpaper_manager/w_m/actions/notify-image.sh
+}
+image()
+{
+sh /usr/share/wallpaper_manager/w_m/actions/image.sh
+inicio
+}
+prev()
+{
+sh /usr/share/wallpaper_manager/w_m/actions/prev.sh
+}
+prev_next()
+{
+sh /usr/share/wallpaper_manager/w_m/actions/prev-next.sh
+}
+all_fav()
+{
+sh /usr/share/wallpaper_manager/w_m/actions/all-fav.sh
+}
+opt_tags()
+{
+sh /usr/share/wallpaper_manager/w_m/categ_actions/opc_tags.sh
+}
+opt_hist()
+{
+sh /usr/share/wallpaper_manager/w_m/actions/hist_opc.sh
+}
+especial()
+{
+sh /usr/share/wallpaper_manager/w_m/actions/imagen-especial.sh
+}
+reload()
+{
+sh /usr/share/wallpaper_manager/w_m/actions/reload.sh
+}
+slide()
+{
+sh /usr/share/wallpaper_manager/w_m/actions/slideshows.sh
+}
+visual()
+{
+sh /usr/share/wallpaper_manager/w_m/actions/opt-image.sh
+}
+edit()
+{
+sh /usr/share/wallpaper_manager/w_m/actions/func_imagemagick.sh
+}
+colorback()
+{
+sh /usr/share/wallpaper_manager/w_m/actions/color-as-back.sh
+}
+open()
+{
+sh /usr/share/wallpaper_manager/w_m/actions/open-place.sh
+}
+search()
+{
+/bin/bash /usr/share/wallpaper_manager/w_m/actions/search.sh
+}
+opt_fav()
+{
+sh /usr/share/wallpaper_manager/w_m/actions/opc_fav.sh
+}
+dialogo_principal()
+{
+
+	opcion=$( zenity --list --radiolist --width="150" --height="490" --title="wallpaper manager" \
+					--column='Pick' --column='Option'  \
+					'TRUE' 		"Change_wallpaper" \
+					'FALSE' 		"Previous_image" \
+					'FALSE' 		"Next_image" \
+					'FALSE' 		"Favorites" \
+					'FALSE' 		"Categories"\
+					'FALSE' 		"History"\
+					'FALSE' 		"Special_image"\
+					'FALSE' 		"All_images"\
+					'FALSE' 		"Notify_current_image" \
+					'FALSE' 		"Open_place" \
+					'FALSE' 		"Slideshow" \
+					'FALSE'			"Color_background"\
+					'FALSE' 		"Visual_mode"\
+					'FALSE' 		"Image_edit"\
+					'FALSE' 		"Google_search"\
+					'FALSE' 		"Reload" )
+
+}
+
+inicio()
+{
+	dialogo_principal
+	if [ ${opcion} = 'Change_wallpaper' ]; then
+		image
+	elif [ ${opcion} = 'Previous_image' ]; then
+		prev
+	elif [ ${opcion} = 'Next_image' ]; then
+		prev_next
+	elif [ ${opcion} = 'Favorites' ]; then
+		opt_fav
+	elif [ ${opcion} = 'Categories' ]; then
+		opt_tags
+	elif [ ${opcion} = 'History' ]; then
+		opt_hist
+	elif [ ${opcion} = 'Special_image' ]; then
+		especial
+	elif [ ${opcion} = 'All_images' ]; then
+		all_fav
+	elif [ ${opcion} = 'Notify_current_image' ]; then
+		notif
+	elif [ ${opcion} = 'Open_place' ]; then
+		open
+	elif [ ${opcion} = 'Slideshow' ]; then
+		slide
+	elif [ ${opcion} = 'Color_background' ]; then
+		colorback
+	elif [ ${opcion} = 'Visual_mode' ]; then
+		visual
+	elif [ ${opcion} = 'Image_edit' ]; then
+		edit
+	elif [ ${opcion} = 'Google_search' ]; then
+		search
+
+	elif [ ${opcion} = 'Reload' ]; then
+		reload
+	else
+		echo "No selection."
+		exit 1
+	fi
+}
+
+inicio
+exit 0

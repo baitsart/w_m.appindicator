@@ -1,0 +1,6 @@
+wall-manager/ usr/share/wallpaper_manager/
+wall-manager/w-m usr/bin/
+wall-manager/wallpaper-manager usr/bin/
+wall-data/wall-manager-icon.png usr/share/pixmaps/
+wall-data/wallpaper_manager.desktop usr/share/applications/
+wall-manager/w_m/wm-app-indicador.desktop etc/xdg/autostart/wall-manager-start.desktop

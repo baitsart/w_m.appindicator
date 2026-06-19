@@ -1,0 +1,13 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Name=Wallpaper Manager
+Comment=Wallpaper Manager is a multifunctional application to manage your desktop background
+Exec=/usr/share/wallpaper_manager/w_m/wm-app-indicador
+Name[es_UY]=Wallpaper Manager
+Terminal=false
+Type=Application
+StartupNotify=true
+Icon=/usr/share/wallpaper_manager/w_m/iconos/wall-manager-icon.png
+Categories=GNOME;GTK;Utility;
+Encoding=UTF-8
+NotShowIn=KDE;MATE;XFCE;

@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+img="$1"
+
+[ -f "$img" ] || {
+    notify-send "No image"
+    exit 1
+}
+
+tmp=$(mktemp --suffix=.jpg)
+trap 'rm -f "$tmp"' EXIT
+cp "$img" "$tmp"
+
+url=$(curl -s -F "image=@$tmp" https://api.imgur.com/3/image \
+-H "Authorization: Client-ID 546c25a59c58ad7" \
+| grep -o '"link":"[^"]*' | cut -d'"' -f4 | sed 's/\\//g')
+
+if [[ "$url" == http* ]]; then
+    xdg-open "https://lens.google.com/uploadbyurl?url=$url" > /dev/null
+    echo "https://lens.google.com/uploadbyurl?url=$url&q="
+else
+    notify-send "Upload failed"
+fi

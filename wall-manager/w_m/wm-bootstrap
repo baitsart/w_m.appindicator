@@ -1,0 +1,16 @@
+#!/bin/sh
+
+USER_NAME="${SUDO_USER:-$(logname 2>/dev/null)}"
+USER_HOME=$(getent passwd "$USER_NAME" | cut -d: -f6)
+
+FLAG="$USER_HOME/.wallpaper_manager/.initialized"
+
+# 1. Primera ejecución
+if [ ! -f "$FLAG" ]; then
+    /usr/share/wallpaper_manager/w_m/actions/reload.sh
+    mkdir -p "$USER_HOME/.wallpaper_manager"
+    touch "$FLAG"
+fi
+
+# 2. Arrancar app real
+exec python3 /usr/share/wallpaper_manager/w_m/wm-app-indicador

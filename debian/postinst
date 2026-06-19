@@ -1,0 +1,25 @@
+#!/bin/bash
+set -e
+
+case "$1" in
+configure)
+
+    # arreglar instalaciones viejas rotas
+    if [ -d /usr/bin/wallpaper-manager ]; then
+        rm -rf /usr/bin/wallpaper-manager
+    fi
+
+    USER_NAME="${SUDO_USER:-$(logname 2>/dev/null || true)}"
+    [ -z "$USER_NAME" ] && exit 0
+
+    USER_HOME=$(getent passwd "$USER_NAME" | cut -d: -f6)
+
+    mkdir -p "$USER_HOME/.wallpaper_manager"
+    chown -R "$USER_NAME:$USER_NAME" "$USER_HOME/.wallpaper_manager"
+    
+    sh /usr/share/wallpaper_manager/wall-manager/install.sh || true
+
+;;
+esac
+
+exit 0

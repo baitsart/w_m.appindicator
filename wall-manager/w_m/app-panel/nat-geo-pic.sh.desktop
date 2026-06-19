@@ -1,0 +1,13 @@
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Icon[es_UY]=/usr/share/wallpaper_manager/w_m/iconos/nat_geo-logo.png
+Exec=/usr/share/wallpaper_manager/w_m/actions/nat-geo-pic.sh
+Name[es_UY]=NatGeo pictures wallpaper
+Name=NatGeo pictures wallpaper
+Icon=/usr/share/wallpaper_manager/w_m/iconos/nat_geo-logo.png
+Comment[es_UY]=Download pictures from NatGeo website
+Comment=Do

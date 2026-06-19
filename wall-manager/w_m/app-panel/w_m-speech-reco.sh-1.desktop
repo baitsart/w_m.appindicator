@@ -1,0 +1,11 @@
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Icon[es_UY]=/usr/share/wallpaper_manager/w_m/iconos/w_m-audio-reco.png
+Exec=/usr/share/wallpaper_manager/w_m/actions/w_m-speech-reco.sh
+Name[es_UY]=wallpaper audio recognition
+Name=wallpaper audio recognition
+Icon=/usr/share/wallpaper_manager/w_m/iconos/w_m-audio-reco.png

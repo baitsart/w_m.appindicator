@@ -1,0 +1,36 @@
+#!/bin/bash
+#----------------------------------------------------------------------#
+#                         * wallpaper-manger *                         #
+#----------------------------------------------------------------------#
+path=$NAUTILUS_SCRIPT_SELECTED_FILE_PATHS
+path=${path%?}
+
+if
+file "$path" | sed 's|'"$path"'||' | grep "image"
+then
+
+if gsettings get org.gnome.desktop.interface color-scheme | grep -q 'prefer-dark'; then 
+    mode="-dark"
+    else
+    mode=""
+fi
+
+gsettings set org.gnome.desktop.background picture-uri"$mode" file:///"$path"
+sh /usr/share/wallpaper_manager/w_m/actions/ir-prev.sh
+exit 1
+	fi
+
+	if [ $? -eq 0 ]; then
+if
+echo "$path" | grep ".xml"
+then
+gsettings set org.gnome.desktop.background picture-uri"$mode" file:///"$path"
+sh /usr/share/wallpaper_manager/w_m/actions/ir-prev.sh
+exit 0
+	fi
+fi
+	if [ $? -eq 0 ]; then
+notify-send -i /usr/share/icons/gnome/32x32/apps/preferences-desktop-wallpaper.png "w-m" "No picture"
+     exit
+fi
+fi

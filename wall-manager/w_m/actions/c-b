@@ -1,0 +1,17 @@
+#!/bin/bash
+
+image=$(gsettings get org.gnome.desktop.background picture-uri-dark | sed 's|'"'"'file://||g;s|\"file://||g;s|///|/|g;s|//|/|' | sed 's|'"'"'file://||g;s|\"file://||g;s|///|/|g;s|//|/|g;s|//|/|g;s|'"'"'||g')
+
+colors=$(convert "$image" -format %c histogram:info:- | \
+  grep -v -E '(0,0,0|255,255,255)' | \
+  sort -nr | head -n 1 | \
+  sed 's/.*(//' | sed 's/).*//' | \
+  awk -F',' '{printf("#%02x%02x%02x\n",$1,$2,$3)}')
+
+echo "$colors" 
+echo "$colors" > ~/.config/Clementine/color_background
+
+gsettings set org.gnome.desktop.background primary-color "$colors"
+sh /usr/share/wallpaper_manager/w_m/actions/custom-dash-panel-color.sh
+
+

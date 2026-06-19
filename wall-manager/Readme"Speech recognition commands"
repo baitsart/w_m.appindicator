@@ -1,0 +1,197 @@
+Throw this command:
+sh /usr/share/wallpaper_manager/w_m/w_m-speech-reco.sh
+and you can add to a shortcut keyboard. Or a panel roper:
+ /usr/share/wallpaper_manager/w_m/app-panel/w_m-speech-reco.sh-1.desktop
+Title:
+wallpaper audio recognition
+And executable path:
+/usr/share/wallpaper_manager/w_m/w_m-speech-reco.sh
+Path to the icon audio recognition:
+/usr/share/wallpaper_manager/w_m/iconos/w_m-audio-reco.png
+
+You can modify the commands in the file: /usr/share/wallpaper_manager/w_m/actions/w_m-speech-reco-cmd-en
+Microphone settings, you can make with the string: michrophone_port=1, this set the port activation, this you should modify to your chosen microphone port, Audio in, select: Microphone, Internal Mic not.
+Works with goolge Speech recognition
+Speech recognition commands:
+
+# ACTIONS AVAILABLE #
+   Command name
+   *activate with*
+
+####################
+   SEARCH
+   (search picture)
+####################
+   HISTORY
+   (history)
+####################
+   OPEN_PLACE
+   (open the place | open the folder)
+####################
+   OPEN_FILE
+   (open file)
+####################
+   CHANGE_IMAGE
+   (change image | change background)
+####################
+   SAME_FOLD
+   (from this folder | same folder)
+####################
+   PREVIOUS
+   (previous image | image previous | previous image)
+####################
+   NEXT
+   (next image | image next | back image)
+####################
+   FAV_LAUNCH
+   (launch of favorites | set of favorites)
+####################
+   FAV_SAVE
+   (save on favorites)
+####################
+   ANIM_LAUNCH
+   (launch of animals | set of animals)
+####################
+   ART_LAUNCH
+   (launch of art | set of art)
+####################
+   CAR_LAUNCH
+   (launch of car | set of car)
+####################
+   COLOR_LAUNCH
+   (launch of colors | set of colors)
+####################
+   CROPS_LAUNCH
+   (launch of crops | launch of paranormal | set of crops | set of paranormal)
+####################
+   DIGI_LAUNCH
+   (launch of digital | set of digital)
+####################
+   BILDS_LAUNCH
+   (launch of buildings | launch of architecture | set of buildings | set of architecture)
+####################
+   SPACE_LAUNCH
+   (launch of space | set of space)
+####################
+   FILMS_LAUNCH
+   (launch of films | launch of film | set of film | poner de film)
+####################
+   MYSTIC_LAUNCH
+   (launch of mystical | set of mystical)
+####################
+   MUSIC_LAUNCH
+   (launch of music | set of music)
+####################
+   OCEAN_LAUNCH
+   (launch of ocean | launch of beach | set of ocean | set of beach)
+####################
+   SCENERY_LAUNCH
+   (launch of scenery | set of scenery)
+####################
+   VEGE_LAUNCH
+   (launch of vegetation | set of vegetations)
+####################
+   RIVERS_LAUNCH
+   (launch of rivers | set of rivers)
+####################
+   SOFT_LAUNCH
+   (launch of software | set of software)
+####################
+   TECNO_LAUNCH
+   (launch of technology | set of technology)
+####################
+   ANIM_SAVE
+   (save of animals | save on animals)
+####################
+   ART_SAVE
+   (save of art | save on art)
+####################
+   CAR_SAVE
+   (save of car | save on car)
+####################
+   COLOR_SAVE
+   (save of colors | save on colors)
+####################
+   CROPS_SAVE
+   (save of crops | save of paranormal | save on crops | save on paranormal)
+####################
+   DIGI_SAVE
+   (save of digital | save on digital)
+####################
+   BILDS_SAVE
+   (save of buildings | save of architecture | save on buildings | save on architecture)
+####################
+   SPACE_SAVE
+   (save of space | save on space)
+####################
+   FILMS_SAVE
+   (save of films | save of film | save on films | save on film)
+####################
+   MYSTIC_SAVE
+   (save of mystical | save on mystical)
+####################
+   MUSIC_SAVE
+   (save of music | save on music)
+####################
+   OCEAN_SAVE
+   (save of ocean | save of beach | save on ocean | save on beach)
+####################
+   SCENERY_SAVE
+   (save of scenery | save on scenery)
+####################
+   VEGE_SAVE
+   (save of vegetation | save on vegetation)
+####################
+   RIVERS_SAVE
+   (save of rivers | save on rivers)
+####################
+   SOFT_SAVE
+   (save of software | save on software)
+####################
+   TECNO_SAVE
+   (save of technology | save on technology)
+####################
+   MODE_ZOOM
+   (zoom)
+####################
+   MODE_CENTERED
+   (centered)
+####################
+   MODE_SCALED
+   (scaled)
+####################
+   MODE_MOSAIC
+   (mosaic)
+####################
+   MODE_STRETCHED
+   (stretched)
+####################
+   INVERT_COLORS
+   (invert colors | color negative)
+####################
+   BLACK_AND_WHITE
+   (black and white | two colors)
+####################
+   PASTE_TEXT <<"quoted text">>
+   (paste text)
+####################
+   NATURAL_COLOR
+   (color natural | image color)
+####################
+   ONLY_COLOR
+   (only color | no picture)
+####################
+   NASA_WALL
+   (nasa wallpaper | nasa background | background nasa | wallpaper nasa)
+####################
+   NOTIFY
+   (notify image | notify current image)
+####################
+   DOWNLOAD <<"quoted text">>
+   (download | download of)
+####################
+   NAT_GEO
+   (nat geo | nacional | national)
+####################
+   SATELLITE
+   (satellite)

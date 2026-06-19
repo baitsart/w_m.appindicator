@@ -1,0 +1,195 @@
+#----------------------------------------------------------------------#
+#                         * wallpaper-manger *                         #
+#----------------------------------------------------------------------#
+# Last revision: Apr /15 /2026 #
+# Download: http://gnome-look.org/content/show.php?content=157308
+
+To install Video wall, dependencies, run:
+
+sudo apt install git make gcc libx11-dev
+
+git push https://github.com/mmhobi7/xwinwrap.git
+
+cd xwinwrap
+make
+sudo make install
+
+Image wallpaper- It will be in "$HOME/.local/share/nautilus/scripts/". To put any background image
+with right click on the image, and Scripts, tab /Image wallpaper,
+click to put on wallpaper, and also be added to the history list.
+
+To (Speech recognition), you should add keyboard shortcuts
+sh /usr/share/wallpaper_manager/w_m/actions/w_m-speech-reco.sh.
+
+And the lanucher for gnome-panel is here:
+nautilus /usr/share/wallpaper_manager/w_m/app-panel/w_m-speech-reco.sh-1.desktop
+Drag and drop on gnome-panel.
+
+Use:
+imagemagick (image manipulation programs),
+sox (Swiss army knife of sound processing),
+xsel (command-line tool to access X clipboard and selection buffers),
+xscreensaver (Automatic screensaver for X),
+mplayer (movie player for Unix-like systems),
+pulseaudio (PulseAudio Volume Control),
+original-awk (The original awk described in "The AWK Programming Language"),
+pkexec (graphical frontend to su),
+curl (Get a file from an HTTP, HTTPS or FTP server),
+xscreensaver (Automatic screensaver for X),
+shantz-xwinwrap (Stick apps to your desktop background.):
+
+sudo apt-get install xplanet zenity imagemagick bc wget dbus-x11 gir1.2-ayatanaappindicator3-0.1 gsettings-desktop-schemas nautilus python3-gi mplayer xscreensaver pkexec xsel python3 curl
+
+
+GNU License. You are free to modify and redistribute
+by  Rodrigo Esteves baitsart@gmail.com www.youtube.com/user/baitsart
+Functions:
+
+ Change wallpaper:
+ To put a random image from a specified directory as background
+ screen.
+
+ Previous image:
+ Put the image background before the current.
+
+ Next image:
+ Set the background image after the current, if launched
+ previous image previously, you can return to it was, with
+ this option.
+
+ Favorites ...:
+
+ Save on Favorites:
+ Track the uri of wallpaper, in the command:
+ "gsettings get org.gnome.desktop.background picture-uri file :///"
+ And create a list called: buenas_imágenes, with the images your
+ keep. As a list of favorites.
+
+ Put of Favorites:
+ To put a random picture, everything on the list
+ "Buenas_imagenes" as wallpaper.
+
+ List favorites:
+ Open a dialogue with all that is in the list "buenas_imágenes" and
+ selecting double click, or click and OK, will be as wallpaper.
+
+ Favorites viewer:
+ Open all favorite images with the application eog (gnome viewer)
+
+ Xml of favorites:
+ Create a rotating wallpaper, images stored
+
+ Remove from favorites: Removes favorites (the current fund)
+
+ Edit of categories: Edit Lists
+
+ By date, favorites: Use databases, saved with date
+
+ Categories:
+ Give the options to save in categories, list, and seeing launch
+ Categories.
+ List, you see favorite pictures stored list.
+ Launch, puts a random picture from the category you choose.
+ View, open all favorite images with the application eog (gnome
+ viewer) where we see of many applications with
+ our images as a slideshow, Open with, or Set as background
+ desk. Although not contained in the history of the program, since only
+ work when execute Wallpaper-Manager, you can, add to history, in the app
+ indicator: ~*History ; include in history 
+ Remove from categories (the current fund). Edit lists. And,
+ By date, categories, and, My personal tags: (create your own)
+
+ The categories are: animals, art, autos_motos, colors, crops_circles,
+ Digital, buildings, space, films, mystics, music, ocean, scenery,
+ Plants ríos_lagos, software, technology.
+
+ History:
+ List History: Lists the last 100 images that have been background
+ desktop, using wallpaper manager.
+ View History: Opens the history list with lightweight viewer wallpaper-gallery.py
+ Include the history: For use when a program puts a background
+ and we have it listed to get back to that image. And, Data by date
+
+ All images:
+ Create a file, which combines all saved data
+ files "Categories" and "Favorites" to launch options
+ Put of All images, View images, or images xml (revolving fund)
+ and Edit data base with Gedit
+ Put in the grub2: Puts the current wallpaper in the background of grub2
+ Open image... Select a particular image file
+ Open xml folder: Select a folder to a revolving fund
+ Launch of this folder: Change the background for one another in the same folder
+ Same directory image: Throwing image directory within ~/Pictures, which is
+ the wallpaper if it is in a subdirectory, if not the same as, Launch of this folder.
+ Save, or use folders: Give, Save, Use or Delete, path folders, if Use, Offers: View,
+ Slideshow, Launch, List or XML, the content, paths to the folders
+ Same folder xml
+ Video Wallpaper: Wallpaper animated, with videos, screensavers, or, the web camera
+ Nasa wallpaper: download nasa website astronomical images
+ and puts desktop background
+ Image from NatGeo: Download National Geogrphic site, an image, in several
+ given categories to choose from.
+ Image from google, by terms: Download images from a web search result
+ Current image of the planet: Download "world_sunlight_map" Opentopia.com picture
+ satellite of the globe, in real time, and updated hourly.
+ Google search by image: Open the wallaper file, in the default browser, google search by images. 
+
+
+ Special image:
+ Save an image as favorite. Offers the function store, or activate
+ your special picture.
+
+ Report current picture:
+ Sends a notification notify-send with the name of the wallpaper
+ current.
+
+ Open place:
+ Launch the file browser, nautilus, selecting the file
+ this as background image
+
+ Slideshows:
+ Slideshows of categories, Slideshows of favorites,
+ Slideshows of current place y Open a Slideshows folder
+
+ Display Mode:
+ Change the scaling mode to display the wallpaper: Zoom, Centered
+ Scaled, Wallpaper, Stretched
+
+ Color of background: Pick color background, to choose a color
+ primary (primary color is transparency, and unlike
+ images with the resolution on the monitor)
+ Natural Option to change primary color whit the image color tone, 
+ with the command: _GNOME_BACKGROUND_REPRESENTATIVE_COLORS
+ also: Add colors, colors List, Edit list. And save
+ Secondary color (secondary color is the primary color degrade over)
+ Choose secondary, Vertical Secondary, Secondary horizontal, and Solid.
+
+ Edit image:
+ Invert Colors
+ White and black
+ Write the picture
+ Rotate clock
+ Rotate anti clock
+ Rotate invert
+
+ Xscreensaver:
+ Deactivate screensaver
+ Activate screensaver
+ Start screensaver
+ screensaver next
+ screensaver prev
+ Pic screensaver
+ Save on Favorites
+ List Favorites
+ Preferences
+ If this is the first time you throw it you should run the function
+ Preferences and two dialog boxes will open, accept two. And that's all
+
+ Refresh List:
+ Create the text file, with the path of all the images in the directory ~/Pictures.
+ Text to be created, just do it once to continue using it with the same images as
+ contained in, while
+ Do not change the names or location. When you make a change to
+ the image folder, you should toss Refresh List, to be reload the data.
+
+ And speech recognition function

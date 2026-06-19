@@ -1,0 +1,2 @@
+#!/bin/bash
+/usr/bin/env python3 /usr/share/wallpaper_manager/w_m/wm-app-indicador &

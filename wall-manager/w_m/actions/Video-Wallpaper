@@ -1,0 +1,88 @@
+#!/bin/bash
+
+#########################################################
+#							#
+#		VideoFondo.sh				#  	
+#							#
+# Realizado inicialmente por Catrip <alktrip@gmail.com>	#
+# y retocado por aabilio <aabilio@gmail.com>		#
+# WTFPL <http://en.wikipedia.org/wiki/WTFPL> 		#
+#########################################################
+
+### OPCIONES ###
+
+PARAM="-fs -sp -ni -nf -st -s -b -o"
+
+dato1="Place a video as Wallpaper"
+dato2="Place Screen Saver and Wallpaper"
+dato3="End playback"
+dato4="Place webcam as Wallpaper"
+dato5="End the program"
+
+con_sonido="Place video with sound"
+sin_sonido="Place video without sound"
+BACK="Return"
+
+### FUNCIONES ###
+
+function fun_opacidad {
+	opacidad=$(zenity --list --width="60" --height="415" --text "Select an option" --title "Opacity level" --column "Opacity" `for (( c=1; c<=9; c++ )); do echo -n "0.$c "; done` 1)
+}
+
+function fun_check {
+	if pidof xwinwrap > /dev/null ; then
+ 		killall xwinwrap
+	fi
+}
+
+function fun_typeson {
+	typeson=$(zenity --list --width="315" --height="260" --text "Video Options" --title "Screen Saver" --column "Option" "$con_sonido" "$sin_sonido" "$BACK")
+	if [ "$typeson" = "$sin_sonido" ]; then
+		SON=" -nosound"
+	fi
+	if [ "$typeson" = "$con_sonido" ]; then
+		unset SON
+	fi
+	if [ "$typeson" = "$BACK" ]; then
+		main
+	fi
+}
+
+### MAIN ###
+
+function main {
+type=$(zenity --list --width="415" --height="260" --text "Indicate the operation to perform" --title "ScreenSaver, Video or WebCam as Wallpaper"  --column "Option" "$dato1" "$dato2" "$dato4" "$dato3" "$dato5")
+
+if [ "$type" = "$dato1" ]; then
+	fun_typeson
+	FILE=`zenity --file-selection \
+          	--title="Select the video to post as Wallpaper"`
+	fun_opacidad
+	fun_check
+	exec xwinwrap $PARAM "$opacidad" -- mplayer "$FILE" -quiet -noconsolecontrols -loop 0$SON -wid WID
+fi
+
+if [ "$type" = "$dato2" ]; then
+	screen=$(ls /usr/lib/xscreensaver/ | zenity --list --width="60" --height="415" --text "Choose a ScreenSaver" --title "ScreenSavers" --column "ScreenSaver")
+	fun_opacidad
+	fun_check
+ 	exec xwinwrap -argb $PARAM "$opacidad" -- /usr/lib/xscreensaver/"$screen" -window-id WID
+fi
+
+if [ "$type" = "$dato3" ]; then
+	fun_check
+fi
+
+if [ "$type" = "$dato4" ]; then
+	fun_opacidad
+	fun_check
+ 	exec xwinwrap $PARAM "$opacidad"  -- mplayer -wid  WID -quiet -fps 30 tv:// -vf mirror
+fi
+
+if [ "$type" = "$dato5" ]; then
+	fun_check
+ 	exit;
+fi
+main
+}
+main

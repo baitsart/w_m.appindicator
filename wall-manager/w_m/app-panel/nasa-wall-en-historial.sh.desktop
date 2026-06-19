@@ -1,0 +1,13 @@
+#!/usr/bin/env xdg-open
+
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Icon[es_UY]=/usr/share/wallpaper_manager/w_m/iconos/nasa.png
+Exec=/usr/share/wallpaper_manager/w_m/actions/nasa-wall-en-historial.sh
+Name[es_UY]=Nasa wallpaper
+Name=Nasa wallpaper
+Icon=/usr/share/wallpaper_manager/w_m/iconos/nasa.png
+Comment[es_UY]=Download pictures of the day from Nasa
+Comment=Download pictures of the day from Nasa

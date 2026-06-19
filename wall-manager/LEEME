@@ -1,0 +1,207 @@
+#----------------------------------------------------------------------#
+#                         * wallpaper-manger *                         #
+#----------------------------------------------------------------------#
+# Última revisión: Abr /15 /2026 #
+# Descarga del sitio web: http://gnome-look.org/content/show.php?content=157308
+Que lo disfrute!
+
+Para instalar las dependencias de Video wall, ejecuta el respectivo comando:
+
+sudo apt install git make gcc libx11-dev
+
+git push https://github.com/mmhobi7/xwinwrap.git
+
+cd xwinwrap
+make
+sudo make install
+
+
+Imagen wallpaper- Estará en "$HOME/.local/share/nautilus/scripts/" para poner cualquier imagen de
+fondo, con hacer click derecho sobre la imagen, y en la pestaña 
+Scripts/Imagen wallpaper, hacer click para poner de wallpaper, y
+también se añadirá a la lista de historial.
+
+Para el reconocimiento de voz, debes añadir a atajos del teclado, en Configuración del sistema... /Teclado / Atajos/ Combinación personalizada. Añadir; Con el nombre que desees, y ésta ruta:
+sh /usr/share/wallpaper_manager/w_m/actions/w_m-speech-reco.sh
+Click sobre, Desactivado, y selecciona una combinación atajo para lanzar el reconocimiento de voz.
+
+Y el lanzador para gnome-panel de speech-reco, está aqui:
+nautilus /usr/share/wallpaper_manager/w_m/app-panel/w_m-speech-reco.sh-1.desktop
+Arrastrar y soltar en el panel de gnome.
+
+Usa: 
+imagemagick (image manipulation programs),
+sox (Swiss army knife of sound processing),
+xsel (command-line tool to access X clipboard and selection buffers),
+xscreensaver (Automatic screensaver for X),
+mplayer (movie player for Unix-like systems),
+pulseaudio (PulseAudio Volume Control),
+original-awk (The original awk described in "The AWK Programming Language"),
+pkexec (graphical frontend to su),
+curl (Get a file from an HTTP, HTTPS or FTP server),
+xscreensaver (Automatic screensaver for X),
+shantz-xwinwrap (Stick apps to your desktop background.):
+
+sudo apt-get install xplanet zenity imagemagick bc wget dbus-x11 gir1.2-ayatanaappindicator3-0.1 gsettings-desktop-schemas nautilus python3-gi mplayer xscreensaver pkexec xsel python3 curl
+
+
+Función, éste script consta de éstas opciones:
+
+# Lanzar imagen al azar:
+# Para poner una imagen al azar, de un directorio indicado, como fondo
+# de pantalla.
+#
+# Imagen anterior:
+# Poner de background la imagen anterior a la actual.
+#
+# Imagen siguiente:
+# Poner de background la imagen siguiente a la actual, si se lanza 
+# previamente Imagen anterior, se puede volver a la que estaba, con
+# esta opción.
+#
+# Favoritos...:
+#
+#  Guardar en favoritos:
+#  Rastrea la uri del wallpaper, en el comando:
+#  "gsettings get org.gnome.desktop.background picture-uri file:///" 
+#  y creara una lista llamada: buenas_imágenes, con las imágenes que tu
+#  guardes. Como una lista de favoritas.
+#
+#  Lanzar de favoritos:
+#  Para poner una imagen al azar, todo lo que este en la lista 
+#  "buenas_imágenes", como fondo de pantalla.
+#
+#  Listar favoritos:
+#  Abre un dialogo con todo lo que este en la lista "buenas_imágenes", y
+#  seleccionando con doble clic, o en clic y Aceptar, se pondrá como
+#  wallpaper.
+#
+#  Ver favoritos:
+#  Abre todas las imágenes favoritas con la aplicación eog (gnome viewer)
+#
+#  xml de favoritos:
+#  Crear un fondo de pantalla rotativo, de las imágenes guardadas
+#  
+#  Eliminar de favoritos: Elimina de favoritos (el fondo actual)
+#
+#  Editar favoritos: Editar listas
+#
+#  Por fecha, favoritos: Usa las bases de datos, guardadas, con fecha.
+#
+# Categorías:
+# Ofrece las opciones de guardar en categorías, listar, lanzar y de ver las
+# categorías.
+# Listar, se ve la lista de imágenes favoritas guardadas.
+# Lanzar, Pone una imagen al azar, de la categoría que elija.
+# Ver, abre todas las imágenes favoritas con la aplicación eog (gnome
+# viewer) donde podemos apreciar de muchas aplicaciones posibles con 
+# nuestras imágenes, como slideshow, Abrir con, o, Poner como fondo de 
+# escritorio. Aunque no figurara en el historial del programa, ya que solo
+# trabaja con fondos puestos usando el programa, si puedes, añadir al 
+# historial, en ~*Historial ; incluir al historial
+# . Eliminar de categorías (el fondo actual). Editar listas. Y, 
+# Por fecha, categorias, y, Mis tags personales: (para crearse los suyos)
+#
+# Las categorías son: animales, arte, autos_motos, colores, crops_circles,
+# digitales, edificios, espacio, films, místicos, musica, océano, paisajes,
+# plantas, ríos_lagos, software, tecnología.
+#
+# Historial:
+#  Lista historial: Lista las ultimas 100 imágenes que se han puesto de fondo 
+#  de escritorio, usando wallpaper manager.
+#
+#  Ver el historial: Abre la lista del historial con el  visor liviano wallpaper-gallery.py
+#
+#  incluir al historial: Para usar cuando un programa pone un background 
+#  y queremos tenerlo en la lista para poder volver a esa imagen. Y, Datos 
+#  por fecha
+#
+# Todos los fondos:
+# Crea un archivo, en el que combina los datos guardados de todos los
+# archivos de "Categorías", y "Favoritos" para ejecutar las opciones
+# Lanzar imagen, Ver las imágenes, o xml de imágenes (fondo rotativo)
+# y Editar_bases_de_datos, con Gedit
+# Poner en el grub2: Pone el wallpaper actual en el fondo del grub2
+# Abrir imagen... : Seleccionar un archivo de imagen en especial
+# Abrir carpeta para xml: Seleccionar una carpeta para un fondo rotativo
+# Lanzar de esta carpeta: Cambiar el fondo por una otro de la misma carpeta
+# Video Wallpaper: Fondo de escritorio animado, con videos, screensavers, o
+# camara web, de wallpaper.
+# Lanzar de este directorio: Lanza imagen, del directorio, dentro de 
+# ~/Imágenes, que está el fondo de escritorio, si está en un subdirectorio,
+# si no es lo mismo que ; Lanzar de esta carpeta. Xml de esta carpeta
+# Guardar, o usar carpetas: Ofrece, Guardar, Usar o Borrar carpetas, si 
+# pruebas Usar: Ofrece, Ver, Slideshow, Lanzar, Listar o Xml, del contenido de las, 
+# rutas a las carpetas
+# Nasa wallpaper: Descarga del sitio web de la nasa imágenes astronómicas
+# y la pone de fondo de escritorio
+# Imagen de NatGeo: Descarga del sitio de National Geogrphic, una imagen, de varias
+# categorías de le da para elegir.
+# Imagen de google, por tema: Descarga imágenes del resultado de una búsqueda web
+# Imagen actual del planeta: Descarga "world_sunlight_map" Opentopia.com, la imagen
+# satelital del globo terraqueo, en tiempo real, y la actualiza cada hora.
+# Google search by image: Abre el navegador por defecto en búsqueda de google por
+# imágenes, la imagen de fondo.
+#
+# Imagen especial:
+# Guarda una imagen como favorita. Ofrece la función guardar, o activar
+# tu imagen especial.
+#
+# Notificar imagen actual:
+# Lanza una notificación de notify-send con el nombre del wallpaper
+# actual.
+#
+# Abrir el lugar:
+# Lanza el navegador de archivos, Nautilus, seleccionando el archivo de
+# imagen que este como background
+#
+# Diapositivas: Diapositivas de categorias, Diapositivas de favoritos,
+# Diapositivas del lugar actual y Abrir carpeta a diapositivas
+#
+# Modo visual:
+# Cambiar el modo de escalado para la visualizar el wallpaper: Ampliar,
+# Centrado, Escalar y Mosaico
+#
+# Color de background: Color opcional, para elegir un color
+# primario (color primario es, la transparencia, y diferencia de las
+# imágenes con la resolución en el monitor) Opción natural, para cambiar
+# el color del auto primario ápice el tono del color, de la fotografía,
+# con el comando: _GNOME_BACKGROUND_REPRESENTATIVE_COLORS
+# También: Guardar en colores, Listar colores, Editar lista. Y, Guardar
+# color secundario (color secundario es, el degrade con el color primario)
+# Elegir secundario, Secundario vertical, Secundario horizontal, y Solido.
+#
+# Editar imagen:
+# Invertir colores
+# Blanco y negro
+# Pegar texto
+# Rotar reloj
+# Rotar anti reloj
+# Rotar invertir
+#
+# Xscreensaver:
+# Desactivar screensaver, Activar screensaver, Comience screensaver, 
+# protector de pantalla anterior, protector de pantalla siguiente, 
+# Elegir protector de pantalla, Guardar en Favoritos xscreen, 
+# Listar Favoritos, Preferencias
+# Si es la primera vez que lo lanzas debes, ejecutar la función de 
+# Preferencias, y se abrirán dos cuadros de diálogo, dale aceptar. Y listo
+#
+# Recargar lista:
+# Usa el comando
+# cd ~/Imágenes
+# find . -regex ".*\(jpg\|JPG\|jpeg\|JPEG\|gif\|GIF\|png\|PNG\|svg\|SVG\|BMP\|bmp\)
+# para crear el archivo de texto llamado fondo-de-escritorio, con la
+# ruta de todas las imágenes del directorio ~/Imágenes. Ese archivo de
+# texto que se creara, basta con hacerlo una sola vez para poder seguir
+# usándolo con las mismas imágenes que figuran en el, mientras
+# no se modifiquen los nombres o el lugar. Cuando haga algún cambio en
+# la carpeta de imágenes, deberá lanzar Recargar lista, para que se
+# recarguen los datos.
+#
+#----------------------------------------------------------------------#
+# Puedes indicar el directorio que deseas remplaza /Imágenes/ por el
+# directorio, que desees, en el archivo: /w_m/reload.sh 
+#----------------------------------------------------------------------#
+# GNU License. Eres libre de modificarlo y redistribuirlo, saludos :) 
+# por Rodrigo Esteves baitsart@gmail.com www.youtube.com/user/baitsart #
