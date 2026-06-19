@@ -1,11 +1,11 @@
-wallpaper-manager (2.0.8.6-1~ubuntu26.04.1) questing; urgency=medium
+wallpaper-manager (2.0.8.7-1~ubuntu26.04.1) questing; urgency=medium
 
   * Rebuild for Ubuntu 26.04.
   * Update dependencies for the new release.
-  * Minor maintenance changes.
+  * Remove obsolete dependency on feh.
   * Add support for using images from the same directory.
   * Add image search functionality.
   * Add background color listing.
   * Add support for ~/.xplanet.
   
- -- Rodrigo Esteves <baitsart@gmail.com>  Fri, 19 Jun 2026 12:00:00 +0000
+ -- Rodrigo Esteves <baitsart@gmail.com>  Fri, 19 Jun 2026 18:00:00 +0000

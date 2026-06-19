@@ -8,6 +8,6 @@ Homepage: http://gnome-look.org/content/show.php/Wallpaper+manager?content=15730
 
 Package: wallpaper-manager
 Architecture: all
-Depends: ${shlibs:Depends}, ${misc:Depends}, xplanet, zenity, imagemagick, bc, wget, dbus-x11, gir1.2-ayatanaappindicator3-0.1, gsettings-desktop-schemas, nautilus, python3-gi, feh, mplayer, xscreensaver, pkexec, xsel, python3, curl
+Depends: ${shlibs:Depends}, ${misc:Depends}, xplanet, zenity, imagemagick, bc, wget, dbus-x11, gir1.2-ayatanaappindicator3-0.1, gsettings-desktop-schemas, nautilus, python3-gi, gir1.2-appindicator3-0.1, mplayer, xscreensaver, pkexec, xsel, python3, curl
 Description: Wallpaper Manager
  Wallpaper Manager is a multi functional application to manage your desktop background
