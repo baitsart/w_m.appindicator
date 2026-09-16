@@ -1,11 +1,9 @@
-wallpaper-manager (2.0.8.7-1~ubuntu26.04.1) questing; urgency=medium
+wallpaper-manager (2.0.8.8-1~ubuntu26.04.1) questing; urgency=medium
 
-  * Rebuild for Ubuntu 26.04.
-  * Update dependencies for the new release.
-  * Remove obsolete dependency on feh.
-  * Add support for using images from the same directory.
-  * Add image search functionality.
-  * Add background color listing.
-  * Add support for ~/.xplanet.
-  
- -- Rodrigo Esteves <baitsart@gmail.com>  Fri, 19 Jun 2026 18:00:00 +0000
+  * Add Citas & Wallpapers feature to download images based on chosen tags and quotes from preferred authors to overlay and set as wallpaper.
+  * Fix the "Write the picture" function.
+  * Fix packaging repository bugs.
+  * Pending - Video wall. Speech Recog.
+
+
+ -- Rodrigo Esteves <baitsart@gmail.com>  Wed, 16 Sep 2026 17:00:00 +0000

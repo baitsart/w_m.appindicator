@@ -23,6 +23,7 @@ ACTIONS = {
 "Change wallpaper": "sh /usr/share/wallpaper_manager/w_m/actions/image.sh ",
 "Previous image": "sh /usr/share/wallpaper_manager/w_m/actions/prev.sh ",
 "Next image": "sh /usr/share/wallpaper_manager/w_m/actions/prev-next.sh ",
+"Citas & Wallpapers": "python3 /usr/share/wallpaper_manager/w_m/actions/wallpaper_con_citas.py",
 "Save on Favorites": "sh /usr/share/wallpaper_manager/w_m/actions/guarda.sh ",
 "Put of Favorites": "sh /usr/share/wallpaper_manager/w_m/actions/image-buenas.sh ",
 "List Favorites": "sh /usr/share/wallpaper_manager/w_m/actions/listar.sh ",
@@ -64,7 +65,7 @@ ACTIONS = {
 "Video Wallpaper": "/bin/bash /usr/share/wallpaper_manager/w_m/actions/Video-Wallpaper ",
 "Nasa wallpaper": "/usr/share/wallpaper_manager/w_m/actions/nasa-wall-en-historial.sh ",
 "Current image of the planet": "/bin/bash /usr/share/wallpaper_manager/w_m/actions/world-wall.sh ",
-"Image from NatGeo": "/bin/bash /usr/share/wallpaper_manager/w_m/actions/nat-geo-pic.sh ",
+# "Image from NatGeo": "/bin/bash /usr/share/wallpaper_manager/w_m/actions/nat-geo-pic.sh ",
 "Image from google, by terms": "/bin/bash /usr/share/wallpaper_manager/w_m/actions/wall-from-goolge.sh ",
 "Google search by images": "/bin/bash /usr/share/wallpaper_manager/w_m/actions/search.sh &",
 "Notify current image": "sh /usr/share/wallpaper_manager/w_m/actions/notify-image.sh ",
@@ -88,7 +89,7 @@ ACTIONS = {
 "Secondary = Solido": "gsettings set org.gnome.desktop.background color-shading-type 'solid'",
 "Invert colors": "sh /usr/share/wallpaper_manager/w_m/actions/complementari.sh ",
 "Black and white": "sh /usr/share/wallpaper_manager/w_m/actions/black-and-white.sh ",
-"Write the picture": "sh /usr/share/wallpaper_manager/w_m/actions/text-to-image.sh ",
+"Write the picture": "sh /usr/share/wallpaper_manager/w_m/actions/text-to-image.py ",
 "Rotate clock": "sh /usr/share/wallpaper_manager/w_m/actions/rotate-clock.sh ",
 "Rotate anti clock": "sh /usr/share/wallpaper_manager/w_m/actions/rotate-anti-clock.sh ",
 "Rotate invert": "sh /usr/share/wallpaper_manager/w_m/actions/rotate-invert.sh ",
@@ -161,6 +162,16 @@ menu_items.show()
 optionName = "Next image"
 menu_items = Gtk.ImageMenuItem(label=optionName)
 img = Gtk.Image.new_from_icon_name("go-next", Gtk.IconSize.MENU)
+img.show()
+menu_items.set_image(img)
+menu_items.set_always_show_image(True)
+menu.append(menu_items)
+menu_items.connect("activate", menuitem_response, optionName)
+menu_items.show()
+
+optionName = "Citas & Wallpapers"
+menu_items = Gtk.ImageMenuItem(label=optionName)
+img = Gtk.Image.new_from_icon_name("insert-image", Gtk.IconSize.MENU)
 img.show()
 menu_items.set_image(img)
 menu_items.set_always_show_image(True)
@@ -656,15 +667,15 @@ listMenu.append(menu_items)
 menu_items.connect("activate", menuitem_response, optionName)
 menu_items.show()
 
-optionName = "Image from NatGeo"
-menu_items = Gtk.ImageMenuItem(label=optionName)
-img = Gtk.Image.new_from_icon_name("go-down", Gtk.IconSize.MENU)
-img.show()
-menu_items.set_image(img)
-menu_items.set_always_show_image(True)
-listMenu.append(menu_items)
-menu_items.connect("activate", menuitem_response, optionName)
-menu_items.show()
+#optionName = "Image from NatGeo"
+#menu_items = Gtk.ImageMenuItem(label=optionName)
+#img = Gtk.Image.new_from_icon_name("go-down", Gtk.IconSize.MENU)
+#img.show()
+#menu_items.set_image(img)
+#menu_items.set_always_show_image(True)
+#listMenu.append(menu_items)
+#menu_items.connect("activate", menuitem_response, optionName)
+#menu_items.show()
 
 optionName = "Image from google, by terms"
 menu_items = Gtk.ImageMenuItem(label=optionName)

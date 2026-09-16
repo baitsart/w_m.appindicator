@@ -34,6 +34,11 @@ echo "[earth]
 cloud_map=$USER_HOME/.earth-wallpaper/clouds_latest.gif
 cloud_ssec=true" > "$USER_HOME/.xplanet/config/default"
 
+mkdir "$USER_HOME/.config/wallpaper_manager"
+mv "/usr/share/wallpaper_manager/Buenas imágenes con citas/tags_activos.config" "$USER_HOME/.config/wallpaper_manager"
+
+cp -R /usr/share/wallpaper_manager/"Buenas imágenes con citas" $USER_HOME/.wallpaper_manager/"Buenas imágenes con citas"
+
 cp /usr/share/wallpaper_manager/"Readme\"Speech recognition commands\"" $USER_HOME/.wallpaper_manager/"Readme\"Speech recognition commands\""
 if [ -f $USER_HOME/.wallpaper_manager/colors-list  ]; then
 echo ""
@@ -96,19 +101,23 @@ The command line function « w-m --help »
 "
 cp -r /usr/share/wallpaper_manager/wall-manager/* /usr/share/wallpaper_manager/
 
+mkdir -p "$USER_HOME/.config/autostart"
 
-if [ -d $USER_HOME/.config/autostart ]; then
-cp /usr/share/wallpaper_manager/w_m/wm-app-indicador.desktop $USER_HOME/.config/autostart/
+cp /usr/share/wallpaper_manager/w_m/wm-app-indicador.desktop "$USER_HOME/.config/autostart/"
 
-chown $USER_NAME:$USER_NAME $USER_HOME/.config/autostart/wm-app-indicador.desktop
-fi
+cp /usr/share/wallpaper_manager/w_m/app-panel/wallpaper_con_citas.desktop /usr/share/applications/
+chmod +x /usr/share/applications/wallpaper_con_citas.desktop
+chown root:root /usr/share/applications/wallpaper_con_citas.desktop
+
+chown $USER_NAME:$USER_NAME "$USER_HOME/.config/autostart/wm-app-indicador.desktop"
+chmod +x "$USER_HOME/.config/autostart/wm-app-indicador.desktop"
+
+cp /usr/share/wallpaper_manager/w_m/wallpaper_manager.desktop /usr/share/applications/
+chmod +x /usr/share/applications/wallpaper_manager.desktop
 
 rm -rf /usr/share/wallpaper_manager/wall-manager/
 rm -rf /usr/share/wallpaper_manager/Dependencies
 rm -f "/usr/share/wallpaper_manager/w_m/Picture wallpaper"
-
 rm -f /usr/share/wallpaper_manager/install.sh
-exit
-fi
-fi
 
+exit

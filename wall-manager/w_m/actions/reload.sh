@@ -1,5 +1,5 @@
 #!/bin/sh
-IMG_FOLDER=$(xdg-user-dir PICTURES)/Imagenes/
+IMG_FOLDER=$(xdg-user-dir PICTURES)
 
 
 find "$IMG_FOLDER"/ -regex ".*\(.jpg\|.JPG\|.jpeg\|.JPEG\|.gif\|.GIF\|.png\|.PNG\|.svg\|.SVG\|.bmp\|.BMP\)" > ~/.wallpaper_manager/fondo-de-escritorio

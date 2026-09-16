@@ -3,11 +3,33 @@ Section: utils
 Priority: extra
 Maintainer: Rodrigo Esteves <baitsart@gmail.com>
 Build-Depends: debhelper-compat (= 13)
-Standards-Version: 3.9.3
+Standards-Version: 4.7.0
 Homepage: http://gnome-look.org/content/show.php/Wallpaper+manager?content=157308
 
 Package: wallpaper-manager
 Architecture: all
-Depends: ${shlibs:Depends}, ${misc:Depends}, xplanet, zenity, imagemagick, bc, wget, dbus-x11, gir1.2-ayatanaappindicator3-0.1, gsettings-desktop-schemas, nautilus, python3-gi, gir1.2-appindicator3-0.1, mplayer, xscreensaver, pkexec, xsel, python3, curl
+Depends: ${shlibs:Depends},
+         ${misc:Depends},
+         python3,
+         python3-gi,
+         python3-gi-cairo,
+         python3-pillow,
+         gir1.2-gtk-3.0,
+         gir1.2-ayatanaappindicator3-0.1,
+         gsettings-desktop-schemas,
+         libnotify-bin,
+         procps,
+         xplanet,
+         zenity,
+         imagemagick,
+         bc,
+         wget,
+         curl,
+         dbus-x11,
+         mplayer,
+         xscreensaver,
+         pkexec,
+         xsel,
+         nautilus
 Description: Wallpaper Manager
  Wallpaper Manager is a multi functional application to manage your desktop background
