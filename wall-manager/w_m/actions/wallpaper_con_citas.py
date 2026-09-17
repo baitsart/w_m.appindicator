@@ -914,6 +914,29 @@ class PreviewDialog(Gtk.Dialog):
         btn_dl_comp = Gtk.Button(label="💾 Guardar con Cita")
         btn_dl_comp.connect("clicked", self.on_descargar_con_cita)
         action_bar_2.pack_start(btn_dl_comp, False, False, 0)
+        
+        action_bar_2 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
+        action_bar_2.set_halign(Gtk.Align.CENTER)
+
+        btn_dl_raw = Gtk.Button(label="📥 Solo Imagen Libre")
+        btn_dl_raw.connect("clicked", self.on_descargar_solo_imagen)
+        action_bar_2.pack_start(btn_dl_raw, False, False, 0)
+
+        btn_dl_comp = Gtk.Button(label="💾 Guardar con Cita")
+        btn_dl_comp.connect("clicked", self.on_descargar_con_cita)
+        action_bar_2.pack_start(btn_dl_comp, False, False, 0)
+
+        # --- BOTÓN AÑADIDO DE SET AS WALLPAPER ---
+        btn_set_wallpaper = Gtk.Button(label="🖥️ Set as wallpaper")
+        btn_set_wallpaper.connect("clicked", self.on_set_as_wallpaper)
+        action_bar_2.pack_start(btn_set_wallpaper, False, False, 0)
+        # -----------------------------------------
+
+        btn_copy = Gtk.Button(label="📋 Copiar Cita")
+        btn_copy.connect("clicked", self.on_copiar_cita)
+        action_bar_2.pack_start(btn_copy, False, False, 0)
+
+        main_box.pack_start(action_bar_2, False, False, 0)
 
         btn_copy = Gtk.Button(label="📋 Copiar Cita")
         btn_copy.connect("clicked", self.on_copiar_cita)
@@ -1069,6 +1092,60 @@ class PreviewDialog(Gtk.Dialog):
         dialog.format_secondary_text(texto)
         dialog.run()
         dialog.destroy()
+
+    # -------------------------------------------------------------
+    # Método nuevo agregado:
+    # -------------------------------------------------------------
+    def on_set_as_wallpaper(self, widget):
+        if not self.hd_image_path.exists():
+            return
+        try:
+            # 1. Generar la imagen compuesta actual
+            comp = generate_composite_image(
+                str(self.hd_image_path),
+                self.cita_data.get("Cita", "") if self.main_app.citas_activas else "",
+                self.cita_data.get("Autor", "") if self.main_app.citas_activas else "",
+                font_path=self.font_path,
+                font_size=self.font_size,
+                offset_x=self.offset_x,
+                offset_y=self.offset_y,
+                align_mode=self.align_mode,
+                width_ratio=self.width_ratio,
+            )
+            filename = f"quote_{self.item_data.get('id', 'imagen')}.jpg"
+            save_path = SAVE_DIR / filename
+            comp.save(save_path, quality=100)
+
+            # 2. Registrar en el historial
+            cmd_history = "sh /usr/share/wallpaper_manager/w_m/actions/ir-prev.sh"
+            subprocess.Popen(cmd_history, shell=True)
+
+            # 3. Detectar si el sistema usa modo oscuro o claro y aplicar el fondo según corresponda
+            file_uri = save_path.as_uri()
+            try:
+                color_scheme = subprocess.check_output(
+                    ['gsettings', 'get', 'org.gnome.desktop.interface', 'color-scheme'],
+                    text=True
+                ).strip().strip("'")
+            except Exception:
+                color_scheme = "default"
+
+            # Si el esquema detectado es oscuro, actualiza picture-uri-dark; de lo contrario, picture-uri
+            if "dark" in color_scheme.lower():
+                key = "picture-uri-dark"
+            else:
+                key = "picture-uri"
+
+            cmd_wallpaper = f'gsettings set org.gnome.desktop.background {key} "{file_uri}"'
+            subprocess.Popen(cmd_wallpaper, shell=True)
+
+            self.mostrar_mensaje(
+                "¡Fondo Aplicado!",
+                f"La imagen fue guardada y establecida como fondo de pantalla:\n{save_path}"
+            )
+        except Exception as e:
+            self.mostrar_mensaje("Error", str(e), Gtk.MessageType.ERROR)
+
 
     def on_descargar_solo_imagen(self, widget):
         if not self.hd_image_path.exists():

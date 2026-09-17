@@ -2,7 +2,7 @@
 [Desktop Entry]
 Name=Wallpaper Manager
 Comment=Wallpaper Manager is a multifunctional application to manage your desktop background
-Exec=/usr/share/wallpaper_manager/w_m/wm-app-indicador
+Exec=env GDK_BACKEND=x11 /usr/share/wallpaper_manager/w_m/wm-app-indicador
 Name[es_UY]=Wallpaper Manager
 Terminal=false
 Type=Application

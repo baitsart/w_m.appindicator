@@ -1,5 +1,6 @@
-wallpaper-manager (2.0.8.8-1~ubuntu26.04.1) questing; urgency=medium
-
+wallpaper-manager (2.0.8.8-2~ubuntu26.04.1) resolute; urgency=medium
+  * Add the button "Set as wallpaper", to Citas & Wallpapers, feature.
+  * Fix the call method to 'wallpaper_con_citas'.
   * Add Citas & Wallpapers feature to download images based on chosen tags and quotes from preferred authors to overlay and set as wallpaper.
   * Fix the "Write the picture" function.
   * Fix packaging repository bugs.

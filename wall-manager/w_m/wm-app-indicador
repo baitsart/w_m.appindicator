@@ -23,7 +23,7 @@ ACTIONS = {
 "Change wallpaper": "sh /usr/share/wallpaper_manager/w_m/actions/image.sh ",
 "Previous image": "sh /usr/share/wallpaper_manager/w_m/actions/prev.sh ",
 "Next image": "sh /usr/share/wallpaper_manager/w_m/actions/prev-next.sh ",
-"Citas & Wallpapers": "python3 /usr/share/wallpaper_manager/w_m/actions/wallpaper_con_citas.py",
+"Citas & Wallpapers": "bash -c 'GDK_BACKEND=x11 gtk-launch wallpaper_con_citas'",
 "Save on Favorites": "sh /usr/share/wallpaper_manager/w_m/actions/guarda.sh ",
 "Put of Favorites": "sh /usr/share/wallpaper_manager/w_m/actions/image-buenas.sh ",
 "List Favorites": "sh /usr/share/wallpaper_manager/w_m/actions/listar.sh ",
