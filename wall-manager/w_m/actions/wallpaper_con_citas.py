@@ -1391,8 +1391,37 @@ class WallpaperManagerWindow(Gtk.Window):
                 if tag in self.chk_estilos:
                     self.chk_estilos[tag].set_active(True)
 
+    def obtener_imagenes_respaldo_picsum(self, cantidad=15):
+        """
+        Generador de respaldo usando Picsum Photos cuando Wallhaven está caído (Error 521/Servidor caído).
+        Devuelve una estructura equivalente a la de Wallhaven para mantener la compatibilidad del programa.
+        """
+        items = []
+        for _ in range(cantidad):
+            img_id = random.randint(1000, 999999)
+            # Para miniaturas (thumb) y versión HD (full_url)
+            width_thumb, height_thumb = 300, 200
+            width_full, height_full = 1920, 1080
+            
+            thumb_url = f"https://picsum.photos/seed/{img_id}/{width_thumb}/{height_thumb}"
+            full_url = f"https://picsum.photos/seed/{img_id}/{width_full}/{height_full}"
+            
+            thumb_path = TEMP_DIR / f"thumb_picsum_{img_id}.jpg"
+            try:
+                if not thumb_path.exists():
+                    descargar_archivo(thumb_url, thumb_path)
+                items.append({
+                    "id": f"picsum_{img_id}",
+                    "thumb_path": str(thumb_path),
+                    "full_url": full_url,
+                    "source_url": full_url
+                })
+            except Exception as e:
+                print(f"Error al descargar miniatura de respaldo: {e}")
+        return items
+
     def cargar_imagenes_async(self):
-        self.lbl_status.set_text("Obteniendo catálogo desde Wallhaven...")
+        self.lbl_status.set_text("Obteniendo catálogo de imágenes...")
         for child in self.flowbox.get_children():
             self.flowbox.remove(child)
 
@@ -1412,6 +1441,7 @@ class WallpaperManagerWindow(Gtk.Window):
                 tags_para_buscar.extend(tanda)
             tags_para_buscar = tags_para_buscar[:25]
 
+            # INTENTO 1: Wallhaven
             for query_tag in tags_para_buscar:
                 params_base = {"q": query_tag, "sorting": "random", "purity": "100"}
                 intentos = [{**params_base, "apikey": WALLHAVEN_API_KEY}, params_base]
@@ -1422,14 +1452,14 @@ class WallpaperManagerWindow(Gtk.Window):
                         query = urllib.parse.urlencode(params)
                         api_url = f"https://wallhaven.cc/api/v1/search?{query}"
                         req = urllib.request.Request(api_url, headers=HTTP_HEADERS)
-                        with urllib.request.urlopen(req, timeout=10) as resp:
+                        with urllib.request.urlopen(req, timeout=8) as resp:
                             if resp.status == 200:
                                 data = json.loads(resp.read().decode("utf-8"))
                                 break
                     except urllib.error.HTTPError as e:
                         ultimo_error = f"HTTP {e.code}: {e.reason}"
-                        if e.code == 403:
-                            continue
+                        if e.code in [403, 521, 500, 502, 503]:
+                            break
                     except Exception as e:
                         ultimo_error = str(e)
 
@@ -1455,6 +1485,11 @@ class WallpaperManagerWindow(Gtk.Window):
                     })
                 except Exception as e:
                     ultimo_error = str(e)
+
+            # INTENTO 2: Si Wallhaven falló totalmente (error 521), usar Picsum
+            if not items:
+                GLib.idle_add(self.lbl_status.set_text, "Wallhaven fuera de servicio (521). Cargando servidor secundario...")
+                items = self.obtener_imagenes_respaldo_picsum(cantidad=15)
 
             if not items:
                 GLib.idle_add(self.lbl_status.set_text, f"Error al conectar: {ultimo_error}")
