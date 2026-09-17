@@ -784,7 +784,7 @@ class AuthorSelectionDialog(Gtk.Dialog):
 class PreviewDialog(Gtk.Dialog):
     def __init__(self, parent, item_data, autor_otro_override=""):
         super().__init__(title="Vista Previa y Edición", transient_for=parent, flags=0)
-        self.set_default_size(860, 550)
+        self.set_default_size(900, 650)
         self.main_app = parent
         self.item_data = item_data
         self.autor_otro_actual = autor_otro_override or self.main_app.autor_otro_seleccionado
@@ -805,42 +805,78 @@ class PreviewDialog(Gtk.Dialog):
             )
 
         main_box = self.get_content_area()
-        main_box.set_spacing(8)
+        main_box.set_spacing(6)
         main_box.set_margin_top(8)
         main_box.set_margin_bottom(8)
+        main_box.set_margin_start(8)
+        main_box.set_margin_end(8)
 
-        top_bar = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
+        # -------------------------------------------------------------
+        # BARRA SUPERIOR DE CONTROLES (COMPACTA Y EN UNA SOLA LÍNEA)
+        # -------------------------------------------------------------
+        top_bar = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+        top_bar.set_valign(Gtk.Align.CENTER)
+        top_bar.set_halign(Gtk.Align.CENTER)
 
-        box_font = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=4)
+        # Provider CSS válido para GTK3 (sin propiedades no soportadas)
+        css_provider = Gtk.CssProvider()
+        css_provider.load_from_data(b"""
+            .compact-bar button, .compact-bar combobox, .compact-bar spinbutton {
+                min-height: 22px;
+                margin-top: 0px;
+                margin-bottom: 0px;
+                padding-top: 0px;
+                padding-bottom: 0px;
+                padding-left: 3px;
+                padding-right: 3px;
+            }
+        """)
+        Gtk.StyleContext.add_provider_for_screen(
+            Gdk.Screen.get_default(), css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
+        )
+        top_bar.get_style_context().add_class("compact-bar")
+
+        # 1. Fuente
+        box_font = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=3)
         box_font.pack_start(Gtk.Label(label="Fuente:"), False, False, 0)
         self.combo_fonts = Gtk.ComboBoxText()
+        self.combo_fonts.set_size_request(130, 26)
         for font in SYSTEM_FONTS:
             self.combo_fonts.append_text(os.path.basename(font))
         if SYSTEM_FONTS:
             self.combo_fonts.set_active(0)
         self.combo_fonts.connect("changed", self.on_font_changed)
         box_font.pack_start(self.combo_fonts, False, False, 0)
-
-        box_font.pack_start(Gtk.Label(label="Tamaño:"), False, False, 0)
-        self.spin_size = Gtk.SpinButton.new_with_range(16, 120, 2)
-        self.spin_size.set_value(self.font_size)
-        self.spin_size.connect("value-changed", self.on_size_changed)
-        box_font.pack_start(self.spin_size, False, False, 0)
         top_bar.pack_start(box_font, False, False, 0)
 
+        # 2. Tamaño
+        box_size = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=3)
+        box_size.pack_start(Gtk.Label(label="Tam:"), False, False, 0)
+        self.spin_size = Gtk.SpinButton.new_with_range(16, 120, 2)
+        self.spin_size.set_size_request(60, 26)
+        self.spin_size.set_value(self.font_size)
+        self.spin_size.connect("value-changed", self.on_size_changed)
+        box_size.pack_start(self.spin_size, False, False, 0)
+        top_bar.pack_start(box_size, False, False, 0)
+
+        # 3. Ancho
         box_width = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=2)
         box_width.pack_start(Gtk.Label(label="Ancho:"), False, False, 0)
         btn_w_dec = Gtk.Button(label="➖")
+        btn_w_dec.set_size_request(26, 26)
         btn_w_dec.connect("clicked", lambda w: self.ajustar_ancho(-0.05))
         btn_w_inc = Gtk.Button(label="➕")
+        btn_w_inc.set_size_request(26, 26)
         btn_w_inc.connect("clicked", lambda w: self.ajustar_ancho(0.05))
         box_width.pack_start(btn_w_dec, False, False, 0)
         box_width.pack_start(btn_w_inc, False, False, 0)
         top_bar.pack_start(box_width, False, False, 0)
 
-        box_align = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=4)
-        box_align.pack_start(Gtk.Label(label="Alineación:"), False, False, 0)
+        # 4. Alineación
+        box_align = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=3)
+        box_align.pack_start(Gtk.Label(label="Alínea:"), False, False, 0)
         self.combo_align = Gtk.ComboBoxText()
+        self.combo_align.set_size_request(120, 26)
         self.combo_align.append("center", "↔ Centrado")
         self.combo_align.append("left", "⇤ Izquierda")
         self.combo_align.append("right", "⇥ Derecha")
@@ -851,40 +887,50 @@ class PreviewDialog(Gtk.Dialog):
         box_align.pack_start(self.combo_align, False, False, 0)
         top_bar.pack_start(box_align, False, False, 0)
 
-        grid_pad = Gtk.Grid()
-        grid_pad.set_column_spacing(2)
-        grid_pad.set_row_spacing(2)
-        btn_up = Gtk.Button(label="▲")
-        btn_up.connect("clicked", lambda w: self.mover_posicion(0, -40))
-        btn_down = Gtk.Button(label="▼")
-        btn_down.connect("clicked", lambda w: self.mover_posicion(0, 40))
-        btn_left = Gtk.Button(label="◄")
-        btn_left.connect("clicked", lambda w: self.mover_posicion(-40, 0))
-        btn_right = Gtk.Button(label="►")
-        btn_right.connect("clicked", lambda w: self.mover_posicion(40, 0))
-        grid_pad.attach(btn_up, 1, 0, 1, 1)
-        grid_pad.attach(btn_left, 0, 1, 1, 1)
-        grid_pad.attach(btn_right, 2, 1, 1, 1)
-        grid_pad.attach(btn_down, 1, 2, 1, 1)
-
-        box_pad = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=4)
+        # 5. Movimiento (4 botones en horizontal pura)
+        box_pad = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=2)
         box_pad.pack_start(Gtk.Label(label="Mover:"), False, False, 0)
-        box_pad.pack_start(grid_pad, False, False, 0)
+        
+        btn_left = Gtk.Button(label="◄")
+        btn_up = Gtk.Button(label="▲")
+        btn_down = Gtk.Button(label="▼")
+        btn_right = Gtk.Button(label="►")
+
+        for b in (btn_left, btn_up, btn_down, btn_right):
+            b.set_size_request(26, 26)
+
+        btn_left.connect("clicked", lambda w: self.mover_posicion(-40, 0))
+        btn_up.connect("clicked", lambda w: self.mover_posicion(0, -40))
+        btn_down.connect("clicked", lambda w: self.mover_posicion(0, 40))
+        btn_right.connect("clicked", lambda w: self.mover_posicion(40, 0))
+
+        box_pad.pack_start(btn_left, False, False, 0)
+        box_pad.pack_start(btn_up, False, False, 0)
+        box_pad.pack_start(btn_down, False, False, 0)
+        box_pad.pack_start(btn_right, False, False, 0)
         top_bar.pack_start(box_pad, False, False, 0)
 
+        # 6. Botón de Información
         btn_info = Gtk.Button(label="ℹ️ Info")
+        btn_info.set_size_request(60, 26)
         btn_info.connect("clicked", self.mostrar_info_metadatos)
-        top_bar.pack_end(btn_info, False, False, 0)
-        main_box.pack_start(top_bar, False, False, 0)
-
-        main_box.pack_start(top_bar, False, False, 0)
+        top_bar.pack_start(btn_info, False, False, 0)
         
+        main_box.pack_start(top_bar, False, False, 2)        
+
+        # -------------------------------------------------------------
+        # ÁREA DE VISTA PREVIA (DINÁMICA)
+        # -------------------------------------------------------------
         self.image_widget = Gtk.Image()
         scrolled_preview = Gtk.ScrolledWindow()
+        scrolled_preview.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
         scrolled_preview.add(self.image_widget)
         main_box.pack_start(scrolled_preview, True, True, 0)
 
-        action_bar_1 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
+        # -------------------------------------------------------------
+        # ACCIONES INFERIORES
+        # -------------------------------------------------------------
+        action_bar_1 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
         action_bar_1.set_halign(Gtk.Align.CENTER)
 
         btn_open_local = Gtk.Button(label="📂 Abrir Imagen")
@@ -904,18 +950,7 @@ class PreviewDialog(Gtk.Dialog):
         action_bar_1.pack_start(btn_change_img, False, False, 0)
         main_box.pack_start(action_bar_1, False, False, 0)
 
-        action_bar_2 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
-        action_bar_2.set_halign(Gtk.Align.CENTER)
-
-        btn_dl_raw = Gtk.Button(label="📥 Solo Imagen Libre")
-        btn_dl_raw.connect("clicked", self.on_descargar_solo_imagen)
-        action_bar_2.pack_start(btn_dl_raw, False, False, 0)
-
-        btn_dl_comp = Gtk.Button(label="💾 Guardar con Cita")
-        btn_dl_comp.connect("clicked", self.on_descargar_con_cita)
-        action_bar_2.pack_start(btn_dl_comp, False, False, 0)
-        
-        action_bar_2 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
+        action_bar_2 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
         action_bar_2.set_halign(Gtk.Align.CENTER)
 
         btn_dl_raw = Gtk.Button(label="📥 Solo Imagen Libre")
@@ -926,17 +961,9 @@ class PreviewDialog(Gtk.Dialog):
         btn_dl_comp.connect("clicked", self.on_descargar_con_cita)
         action_bar_2.pack_start(btn_dl_comp, False, False, 0)
 
-        # --- BOTÓN AÑADIDO DE SET AS WALLPAPER ---
         btn_set_wallpaper = Gtk.Button(label="🖥️ Set as wallpaper")
         btn_set_wallpaper.connect("clicked", self.on_set_as_wallpaper)
         action_bar_2.pack_start(btn_set_wallpaper, False, False, 0)
-        # -----------------------------------------
-
-        btn_copy = Gtk.Button(label="📋 Copiar Cita")
-        btn_copy.connect("clicked", self.on_copiar_cita)
-        action_bar_2.pack_start(btn_copy, False, False, 0)
-
-        main_box.pack_start(action_bar_2, False, False, 0)
 
         btn_copy = Gtk.Button(label="📋 Copiar Cita")
         btn_copy.connect("clicked", self.on_copiar_cita)
@@ -945,8 +972,13 @@ class PreviewDialog(Gtk.Dialog):
         main_box.pack_start(action_bar_2, False, False, 0)
 
         self.hd_image_path = TEMP_DIR / f"full_{item_data['id']}.jpg"
+        self.connect("size-allocate", self.on_window_resized)
         self.show_all()
         self.cargar_y_renderizar_async()
+
+    def on_window_resized(self, widget, allocation):
+        # Re-renderiza de forma óptima al cambiar el tamaño de ventana
+        GLib.idle_add(self.renderizar_vista_previa)
 
     def ajustar_ancho(self, delta):
         self.width_ratio = max(0.3, min(0.9, self.width_ratio + delta))
@@ -1005,7 +1037,13 @@ class PreviewDialog(Gtk.Dialog):
             )
             preview_path = TEMP_DIR / "preview_current.jpg"
             comp.save(preview_path, quality=90)
-            pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(str(preview_path), 900, 600, True)
+
+            # Obtener dimensiones disponibles para escalar adecuadamente la imagen
+            alloc = self.image_widget.get_allocation()
+            max_w = max(alloc.width, 700)
+            max_h = max(alloc.height, 400)
+
+            pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale(str(preview_path), max_w, max_h, True)
             self.image_widget.set_from_pixbuf(pixbuf)
         except Exception as e:
             print(f"Error renderizando vista previa: {e}")
@@ -1084,7 +1122,6 @@ class PreviewDialog(Gtk.Dialog):
         dialog.destroy()
 
     def mostrar_mensaje(self, titulo, texto, message_type=Gtk.MessageType.INFO):
-        """Método auxiliar de mensajes dentro de la clase"""
         dialog = Gtk.MessageDialog(
             transient_for=self, flags=0, message_type=message_type,
             buttons=Gtk.ButtonsType.OK, text=titulo
@@ -1093,14 +1130,10 @@ class PreviewDialog(Gtk.Dialog):
         dialog.run()
         dialog.destroy()
 
-    # -------------------------------------------------------------
-    # Método nuevo agregado:
-    # -------------------------------------------------------------
     def on_set_as_wallpaper(self, widget):
         if not self.hd_image_path.exists():
             return
         try:
-            # 1. Generar la imagen compuesta actual
             comp = generate_composite_image(
                 str(self.hd_image_path),
                 self.cita_data.get("Cita", "") if self.main_app.citas_activas else "",
@@ -1116,11 +1149,9 @@ class PreviewDialog(Gtk.Dialog):
             save_path = SAVE_DIR / filename
             comp.save(save_path, quality=100)
 
-            # 2. Registrar en el historial
             cmd_history = "sh /usr/share/wallpaper_manager/w_m/actions/ir-prev.sh"
             subprocess.Popen(cmd_history, shell=True)
 
-            # 3. Detectar si el sistema usa modo oscuro o claro y aplicar el fondo según corresponda
             file_uri = save_path.as_uri()
             try:
                 color_scheme = subprocess.check_output(
@@ -1130,12 +1161,7 @@ class PreviewDialog(Gtk.Dialog):
             except Exception:
                 color_scheme = "default"
 
-            # Si el esquema detectado es oscuro, actualiza picture-uri-dark; de lo contrario, picture-uri
-            if "dark" in color_scheme.lower():
-                key = "picture-uri-dark"
-            else:
-                key = "picture-uri"
-
+            key = "picture-uri-dark" if "dark" in color_scheme.lower() else "picture-uri"
             cmd_wallpaper = f'gsettings set org.gnome.desktop.background {key} "{file_uri}"'
             subprocess.Popen(cmd_wallpaper, shell=True)
 
@@ -1145,7 +1171,6 @@ class PreviewDialog(Gtk.Dialog):
             )
         except Exception as e:
             self.mostrar_mensaje("Error", str(e), Gtk.MessageType.ERROR)
-
 
     def on_descargar_solo_imagen(self, widget):
         if not self.hd_image_path.exists():
