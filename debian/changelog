@@ -1,5 +1,6 @@
-wallpaper-manager (2.0.8.8-4~ubuntu26.04.1) resolute; urgency=medium
-  * Version stable- the stuff of edit the quote text, on 'Cita Wallpaper'.
+wallpaper-manager (2.0.8.8-5~ubuntu26.04.1) resolute; urgency=medium
+  * The only improve, was the update to Citas & Wallpapers.
+  * Version stable- the stuff of edit the quote text, on 'Citas & Wallpaper'.
   * Preparing an alternative image source because the original Wallhaven server is down.
   * Add the button "Set as wallpaper", to Citas & Wallpapers, feature.
   * Fix the call method to 'wallpaper_con_citas'.
