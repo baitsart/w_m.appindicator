@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 case "$1" in
 configure)
@@ -15,23 +16,18 @@ configure)
     if [ -n "$USER_NAME" ] && [ "$USER_NAME" != "root" ]; then
         USER_HOME=$(getent passwd "$USER_NAME" | cut -d: -f6)
         
-        # Forzar propiedad y permisos totales de lectura/escritura/ejecución
+        # Forzar propiedad y permisos en la ruta compartida
         if [ -d /usr/share/wallpaper_manager ]; then
             chown -R "$USER_NAME:$USER_NAME" /usr/share/wallpaper_manager
             chmod -R 777 /usr/share/wallpaper_manager
         fi
 
-        # Configurar carpeta personal
+        # Configurar carpeta personal de usuario de manera segura
         if [ -n "$USER_HOME" ] && [ -d "$USER_HOME" ]; then
             mkdir -p "$USER_HOME/.wallpaper_manager"
             chown -R "$USER_NAME:$USER_NAME" "$USER_HOME/.wallpaper_manager"
             chmod -R 700 "$USER_HOME/.wallpaper_manager"
         fi
-    fi
-
-    # 3. Ejecutar script interno de instalación si existe
-    if [ -f /usr/share/wallpaper_manager/w_m/wm-bootstrap ]; then
-        sh /usr/share/wallpaper_manager/w_m/wm-bootstrap || true
     fi
 ;;
 esac
