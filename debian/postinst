@@ -1,24 +1,38 @@
 #!/bin/bash
-set -e
 
 case "$1" in
 configure)
-
-    # arreglar instalaciones viejas rotas
-    if [ -d /usr/bin/wallpaper-manager ]; then
-        rm -rf /usr/bin/wallpaper-manager
+    # 1. Detectar al usuario real de la sesión gráfica de forma infalible
+    USER_NAME="${SUDO_USER}"
+    if [ -z "$USER_NAME" ] || [ "$USER_NAME" = "root" ]; then
+        USER_NAME=$(who | awk '{print $1}' | head -n 1)
+    fi
+    if [ -z "$USER_NAME" ] || [ "$USER_NAME" = "root" ]; then
+        USER_NAME=$(awk -F: '$3 >= 1000 && $3 < 65534 {print $1; exit}' /etc/passwd)
     fi
 
-    USER_NAME="${SUDO_USER:-$(logname 2>/dev/null || true)}"
-    [ -z "$USER_NAME" ] && exit 0
+    # 2. Aplicar permisos recursivos si se encontró un usuario válido
+    if [ -n "$USER_NAME" ] && [ "$USER_NAME" != "root" ]; then
+        USER_HOME=$(getent passwd "$USER_NAME" | cut -d: -f6)
+        
+        # Forzar propiedad y permisos totales de lectura/escritura/ejecución
+        if [ -d /usr/share/wallpaper_manager ]; then
+            chown -R "$USER_NAME:$USER_NAME" /usr/share/wallpaper_manager
+            chmod -R 777 /usr/share/wallpaper_manager
+        fi
 
-    USER_HOME=$(getent passwd "$USER_NAME" | cut -d: -f6)
+        # Configurar carpeta personal
+        if [ -n "$USER_HOME" ] && [ -d "$USER_HOME" ]; then
+            mkdir -p "$USER_HOME/.wallpaper_manager"
+            chown -R "$USER_NAME:$USER_NAME" "$USER_HOME/.wallpaper_manager"
+            chmod -R 700 "$USER_HOME/.wallpaper_manager"
+        fi
+    fi
 
-    mkdir -p "$USER_HOME/.wallpaper_manager"
-    chown -R "$USER_NAME:$USER_NAME" "$USER_HOME/.wallpaper_manager"
-    
-    sh /usr/share/wallpaper_manager/wall-manager/install.sh || true
-
+    # 3. Ejecutar script interno de instalación si existe
+    if [ -f /usr/share/wallpaper_manager/w_m/wm-bootstrap ]; then
+        sh /usr/share/wallpaper_manager/w_m/wm-bootstrap || true
+    fi
 ;;
 esac
 
