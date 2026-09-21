@@ -1,4 +1,7 @@
-wallpaper-manager (2.0.8.8-7~ubuntu26.04.1) resolute; urgency=medium
+wallpaper-manager (2.0.8.8-9~ubuntu26.04.1) resolute; urgency=medium
+  * The up to date of wallpaper-con-citas, on version (1.0.3)
+  * Remove the creation and handling of user-specific folders from the postinst script to avoid permission conflicts (PermissionError) with configuration directories such as ~/.config/wallpaper_manager.
+  * Restrict permission adjustments to the system-wide shared path (/usr/share/wallpaper_manager/) only.
   * Correct the installation path in debian/wallpaper-manager.install using - wall-manager/* to avoid directory duplication.
   * Adjust the postinst script to ensure correct permissions and ownership - upon completion of package configuration.
   * Now, Citas & Wallpapers images can be downloaded from additional servers, such as pixabay.com and www.pexels.com. We also have a comprehensive «Otros autores» list—downloaded just once—that simplifies the process of searching for authors and retrieving citations.

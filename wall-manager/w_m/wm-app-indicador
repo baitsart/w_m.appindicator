@@ -19,6 +19,13 @@ import subprocess
 import os
 import sys
 
+archivo_imagenes = os.path.expanduser("~/.wallpaper_manager/fondo-de-escritorio")
+if not os.path.exists(archivo_imagenes):
+    # Lanzar el comando en segundo plano
+    subprocess.Popen(
+        ["sh", "/usr/share/wallpaper_manager/w_m/actions/reload.sh"]
+    )
+    
 ACTIONS = {
 "Change wallpaper": "sh /usr/share/wallpaper_manager/w_m/actions/image.sh ",
 "Previous image": "sh /usr/share/wallpaper_manager/w_m/actions/prev.sh ",
