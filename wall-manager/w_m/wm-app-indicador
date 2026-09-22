@@ -96,7 +96,7 @@ ACTIONS = {
 "Secondary = Solido": "gsettings set org.gnome.desktop.background color-shading-type 'solid'",
 "Invert colors": "sh /usr/share/wallpaper_manager/w_m/actions/complementari.sh ",
 "Black and white": "sh /usr/share/wallpaper_manager/w_m/actions/black-and-white.sh ",
-"Write the picture": "sh /usr/share/wallpaper_manager/w_m/actions/text-to-image.py ",
+"Write the picture": "python3 /usr/share/wallpaper_manager/w_m/actions/text-to-image.py ",
 "Rotate clock": "sh /usr/share/wallpaper_manager/w_m/actions/rotate-clock.sh ",
 "Rotate anti clock": "sh /usr/share/wallpaper_manager/w_m/actions/rotate-anti-clock.sh ",
 "Rotate invert": "sh /usr/share/wallpaper_manager/w_m/actions/rotate-invert.sh ",

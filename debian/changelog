@@ -1,4 +1,6 @@
-wallpaper-manager (2.0.8.8-9~ubuntu26.04.1) resolute; urgency=medium
+wallpaper-manager (2.0.8.9-1~ubuntu26.04.1) resolute; urgency=medium
+  * Add a transparent option to text background. And fix the "Write the Picture" function.
+  * The up to date of wallpaper-con-citas, on version (1.0.4)
   * The up to date of wallpaper-con-citas, on version (1.0.3)
   * Remove the creation and handling of user-specific folders from the postinst script to avoid permission conflicts (PermissionError) with configuration directories such as ~/.config/wallpaper_manager.
   * Restrict permission adjustments to the system-wide shared path (/usr/share/wallpaper_manager/) only.

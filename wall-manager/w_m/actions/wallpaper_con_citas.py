@@ -692,7 +692,7 @@ def wrap_text(text, font, max_width, draw):
     if current: lines.append(current)
     return lines
 
-def generate_composite_image(bg_path, quote_text, author_text, font_path=None, font_size=42, offset_x=0, offset_y=0, align_mode="center", width_ratio=0.7):
+def generate_composite_image(bg_path, quote_text, author_text, font_path=None, font_size=42, offset_x=0, offset_y=0, align_mode="center", width_ratio=0.7, draw_background=True):
     bg_image = Image.open(bg_path).convert("RGB")
 
     # --- ¡OPTIMIZACIÓN CRUCIAL PARA LA CPU! ---
@@ -734,7 +734,12 @@ def generate_composite_image(bg_path, quote_text, author_text, font_path=None, f
     hpos = max(margin, min(margin + offset_x, canvas_w - box_w - margin))
     vpos = max(margin, min(margin + offset_y, canvas_h - box_h - margin))
 
-    draw_overlay.rectangle([hpos, vpos, hpos + box_w, vpos + box_h], fill=(r, g, b, 150))
+    if draw_background:
+        small = bg_image.resize((1, 1), Image.Resampling.LANCZOS).convert("RGB")
+        pixel = small.getpixel((0, 0))
+        r, g, b = pixel[0], pixel[1], pixel[2]
+        draw_overlay.rectangle([hpos, vpos, hpos + box_w, vpos + box_h], fill=(r, g, b, 150))
+
     result = Image.alpha_composite(bg_image.convert("RGBA"), overlay)
     draw = ImageDraw.Draw(result)
 
@@ -863,6 +868,7 @@ class PreviewDialog(Gtk.Dialog):
         self.offset_y = 0
         self.width_ratio = 0.7
         self.align_mode = "center"
+        self.draw_background = True
         self.cita_data = {"Cita": "", "Autor": "", "Fecha": "", "URL": ""}
 
         if self.main_app.citas_activas:
@@ -954,6 +960,12 @@ class PreviewDialog(Gtk.Dialog):
         self.combo_align.connect("changed", self.on_align_changed)
         box_align.pack_start(self.combo_align, False, False, 0)
         top_bar.pack_start(box_align, False, False, 0)
+        
+        self.chk_bg = Gtk.CheckButton(label="𝘉𝘖𝘟𝘌𝘚")
+        self.chk_bg.set_active(True)
+        self.chk_bg.connect("toggled", self.on_toggle_fondo)
+        top_bar.pack_start(self.chk_bg, False, False, 0)
+
 
         # 5. Movimiento (4 botones en horizontal pura)
         box_pad = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=2)
@@ -1057,6 +1069,10 @@ class PreviewDialog(Gtk.Dialog):
         self.offset_y = max(0, self.offset_y + dy)
         self.renderizar_vista_previa()
 
+    def on_toggle_fondo(self, widget):
+        self.draw_background = widget.get_active()
+        self.renderizar_vista_previa()
+
     def on_align_changed(self, combo):
         self.align_mode = combo.get_active_id()
         self.renderizar_vista_previa()
@@ -1102,6 +1118,7 @@ class PreviewDialog(Gtk.Dialog):
                 offset_y=self.offset_y,
                 align_mode=self.align_mode,
                 width_ratio=self.width_ratio,
+                draw_background=self.draw_background
             )
             preview_path = TEMP_DIR / "preview_current.jpg"
             comp.save(preview_path, quality=90)
@@ -1212,6 +1229,7 @@ class PreviewDialog(Gtk.Dialog):
                 offset_y=self.offset_y,
                 align_mode=self.align_mode,
                 width_ratio=self.width_ratio,
+                draw_background=self.draw_background
             )
             filename = f"quote_{self.item_data.get('id', 'imagen')}.jpg"
             save_path = SAVE_DIR / filename
@@ -1264,7 +1282,7 @@ class PreviewDialog(Gtk.Dialog):
                 offset_x=self.offset_x,
                 offset_y=self.offset_y,
                 align_mode=self.align_mode,
-                width_ratio=self.width_ratio,
+                width_ratio=self.width_ratio
             )
             filename = f"quote_{self.item_data.get('id', 'imagen')}.jpg"
             save_path = SAVE_DIR / filename
@@ -1628,7 +1646,7 @@ class WallpaperManagerWindow(Gtk.Window):
         return items
 
     def cargar_imagenes_async(self):
-        self.lbl_status.set_text("Obteniendo exactamente 35 fondos...")
+        self.lbl_status.set_text("Obteniendo exactamente 25 fondos...")
         for child in self.flowbox.get_children():
             self.flowbox.remove(child)
 
@@ -1641,9 +1659,9 @@ class WallpaperManagerWindow(Gtk.Window):
             items = []
             vistos = set()
 
-            # Recorremos los tags activos ordenadamente hasta completar 35
+            # Recorremos los tags activos ordenadamente hasta completar 25
             for query_tag in tags_activos:
-                if len(items) >= 35:
+                if len(items) >= 25:
                     break
                 
                 # 1. Wallhaven (filtrando horizontales/cuadrados)
@@ -1655,7 +1673,7 @@ class WallpaperManagerWindow(Gtk.Window):
                         if resp.status == 200:
                             data = json.loads(resp.read().decode("utf-8"))
                             for item in data.get("data", []):
-                                if len(items) >= 35:
+                                if len(items) >= 25:
                                     break
                                 if item["id"] not in vistos:
                                     if item.get("width", 0) >= item.get("height", 0):
@@ -1672,21 +1690,21 @@ class WallpaperManagerWindow(Gtk.Window):
                 except Exception as e:
                     print(f"Aviso Wallhaven ({query_tag}): {e}")
 
-                # 2. Rellenar con Pixabay / Pexels si aún faltan para llegar a 35
-                if len(items) < 35:
-                    pixabay_items = self.obtener_imagenes_pixabay(query_tag, cantidad=35 - len(items))
+                # 2. Rellenar con Pixabay / Pexels si aún faltan para llegar a 25
+                if len(items) < 25:
+                    pixabay_items = self.obtener_imagenes_pixabay(query_tag, cantidad=25 - len(items))
                     for p_item in pixabay_items:
-                        if p_item["id"] not in vistos and len(items) < 35:
+                        if p_item["id"] not in vistos and len(items) < 25:
                             vistos.add(p_item["id"])
                             items.append(p_item)
 
-            # 3. Respaldo estricto con Picsum si faltan elementos para completar los 35 exactos
-            if len(items) < 35:
-                faltantes = 35 - len(items)
+            # 3. Respaldo estricto con Picsum si faltan elementos para completar los 25 exactos
+            if len(items) < 25:
+                faltantes = 25 - len(items)
                 items.extend(self.obtener_imagenes_respaldo_picsum(cantidad=faltantes))
 
-            # Limitamos estrictamente a los primeros 35 elementos recopilados
-            items = items[:35]
+            # Limitamos estrictamente a los primeros 25 elementos recopilados
+            items = items[:25]
             GLib.idle_add(self.actualizar_grid_miniaturas, items)
 
         threading.Thread(target=worker, daemon=True).start()
@@ -1721,7 +1739,7 @@ class WallpaperManagerWindow(Gtk.Window):
         return items
 
     def cargar_imagenes_async(self):
-        self.lbl_status.set_text("Obteniendo aleatoriamente 35 fondos de varios tags y sitios...")
+        self.lbl_status.set_text("Obteniendo aleatoriamente 25 fondos de varios tags y sitios...")
         for child in self.flowbox.get_children():
             self.flowbox.remove(child)
 
@@ -1735,9 +1753,9 @@ class WallpaperManagerWindow(Gtk.Window):
             vistos = set()
             sitios = ["wallhaven", "pixabay"]
 
-            # Bucle para recolectar de forma aleatoria hasta llegar a 35
+            # Bucle para recolectar de forma aleatoria hasta llegar a 25
             intentos = 0
-            while len(items) < 35 and intentos < 60:
+            while len(items) < 25 and intentos < 60:
                 intentos += 1
                 tag_actual = random.choice(tags_activos)
                 sitio_actual = random.choice(sitios)
@@ -1754,7 +1772,7 @@ class WallpaperManagerWindow(Gtk.Window):
                                 pool_wh = data.get("data", [])
                                 random.shuffle(pool_wh)
                                 for item in pool_wh:
-                                    if len(items) >= 35:
+                                    if len(items) >= 25:
                                         break
                                     if item["id"] not in vistos:
                                         if item.get("width", 0) >= item.get("height", 0):
@@ -1776,7 +1794,7 @@ class WallpaperManagerWindow(Gtk.Window):
                         pixabay_items = self.obtener_imagenes_pixabay(tag_actual, cantidad=15)
                         random.shuffle(pixabay_items)
                         for p_item in pixabay_items:
-                            if len(items) >= 35:
+                            if len(items) >= 25:
                                 break
                             if p_item["id"] not in vistos:
                                 vistos.add(p_item["id"])
@@ -1784,14 +1802,14 @@ class WallpaperManagerWindow(Gtk.Window):
                     except Exception as e:
                         print(f"Aviso Pixabay ({tag_actual}): {e}")
 
-            # Respaldo con Picsum de manera aleatoria si aún faltan elementos para los 35 exactos
-            if len(items) < 35:
-                faltantes = 35 - len(items)
+            # Respaldo con Picsum de manera aleatoria si aún faltan elementos para los 25 exactos
+            if len(items) < 25:
+                faltantes = 25 - len(items)
                 items.extend(self.obtener_imagenes_respaldo_picsum(cantidad=faltantes))
 
-            # Mezcla final de todo el conjunto y corte estricto a 35
+            # Mezcla final de todo el conjunto y corte estricto a 25
             random.shuffle(items)
-            items = items[:35]
+            items = items[:25]
             GLib.idle_add(self.actualizar_grid_miniaturas, items)
 
         threading.Thread(target=worker, daemon=True).start()
