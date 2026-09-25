@@ -1,4 +1,6 @@
-wallpaper-manager (2.0.8.9-1~ubuntu26.04.1) resolute; urgency=medium
+wallpaper-manager (2.0.8.9-3~ubuntu26.04.1) resolute; urgency=medium
+  * Update wallpaper-con-citas to 1.0.7 version. It was necessary to correct an error related to \"Other authors.\" It only displays the following: No citations found. /Final revision.
+  * Latest fixes to "wallpaper-con-citas" 1.0.6; Added writing "metadata" to image. Changed so that it does not overwrite if the quote is changed. And it was fixed at the Quote Edition in the image, more stable.
   * Add a transparent option to text background. And fix the "Write the Picture" function.
   * The up to date of wallpaper-con-citas, on version (1.0.4)
   * The up to date of wallpaper-con-citas, on version (1.0.3)
