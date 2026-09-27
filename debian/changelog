@@ -1,4 +1,6 @@
-wallpaper-manager (2.0.8.9-4~ubuntu26.04.1) resolute; urgency=medium
+wallpaper-manager (2.0.8.9-6~ubuntu26.04.1) resolute; urgency=medium
+  * Second upload. Improving the interface. Bug fixes: If the quote is disabled, do not display the empty text box; instead, it should remain empty unless "Edit text" is selected. Allow closing the image editing window with Ctrl+W, and the main window with Ctrl+Q. Refine the code so that the Prem quote output includes the event venue name, if mentioned.
+  
   * The Prem quotes might be getting blocked due to too many requests. We are now loading them locally from the `banco.json` file. And minor code refinements.
   * Update wallpaper-con-citas to 1.0.7 version. It was necessary to correct an error related to \"Other authors.\" It only displays the following: No citations found. /Final revision.
   * Latest fixes to "wallpaper-con-citas" 1.0.6; Added writing "metadata" to image. Changed so that it does not overwrite if the quote is changed. And it was fixed at the Quote Edition in the image, more stable.
