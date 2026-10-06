@@ -1,4 +1,12 @@
-wallpaper-manager (2.0.9.0-2~ubuntu26.04.1) resolute; urgency=medium
+wallpaper-manager (2.0.9.0-3~ubuntu26.04.1) resolute; urgency=medium
+  * Up to date on wallpaper-con-citas, to (1.2.4):
+  * An ONLINE/OFFLINE toggle is added to the GTK interface. Turning it off cancels the download, and it loads local images in batches of 25 from: ~/$PICTURES/wallpaper manager_citas. 
+  * You can upload a local folder to batch-upload personal images: + Folder
+
+  * Se agrega un ONLINE - OFFLINE, en GTK. Y que al apagar, cancela la descargar, y cargue de a 25 imágenes locales, de: ~/Imágenes/wallpaper manager_citas
+  * Se puede cargar una carpeta local, para cargar imágenes en lote personal: + Folder
+
+
   * Add white text to a dark image — black text to a light image. Agregué texto blanco a imagen oscura — texto negro a imagen clara; on wallpaper-con-citas, to (1.2.4).  
 
   * Up to date on wallpaper-con-citas, to (1.2.3). The scripts for the booth—`prem_rawat_quotes.py` and `sadhguru_quotes.py`—had not been included in the package: Fixed. And a few details about the Python method. The teachers wanted to spark a thirst for knowledge 😉 It’s all sorted out now—thanks to them. I hope you enjoy it!
