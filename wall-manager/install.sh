@@ -1,14 +1,8 @@
 #!/bin/sh
 
 
-USER_NAME="${SUDO_USER:-$(logname 2>/dev/null)}"
-USER_HOME=$(getent passwd "$USER_NAME" | cut -d: -f6)
-image_folder=$(grep '^XDG_PICTURES_DIR' "$USER_HOME/.config/user-dirs.dirs" \
-| cut -d'=' -f2 \
-| tr -d '"' \
-| sed "s|\$HOME|$USER_HOME|")
-
-USER_HOME=$(getent passwd "$USER_NAME" | cut -d: -f6)
+USER_NAME=$(echo "${SUDO_USER:-$(logname 2>/dev/null)}" | cut -d "-" -f2)
+USER_HOME="/home/$USER_NAME"
 image_folder=$(grep '^XDG_PICTURES_DIR' "$USER_HOME/.config/user-dirs.dirs" \
 | cut -d'=' -f2 \
 | tr -d '"' \

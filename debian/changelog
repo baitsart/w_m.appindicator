@@ -1,4 +1,7 @@
-wallpaper-manager (2.0.9.0-4~ubuntu26.04.1) resolute; urgency=medium
+wallpaper-manager (2.0.9.0-5~ubuntu26.04.1) resolute; urgency=medium
+  * Just a little bug, on the installer, caused the nautilus script, files, omission: Fixed.
+  * Add the file on rotative wallpaper, to history.
+
   * Up to date on wallpaper-con-citas, to (1.2.7)
   * You can now set up a rotation for quotes and/or wallpapers, with an optional autostart feature. With the settings we used to edit the appointment. Improvements have been made to quote downloading for other languages. New dependency: the `yad` command.
   * If you want to do some development work, the script `/usr/share/wallpaper_manager/Buenas_imágenes_citas/new_authors_banks.py` is available. It handles downloading *all* quotes for a given author—specifically those from az-quotes listed in `autores_completos_db.json`—using the same method employed for "Sri Sri Ravi Shankar." It might become editable in future versions via a "Select default authors" feature; that functionality is close to completion and wouldn't take much effort to implement.
