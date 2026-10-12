@@ -1,4 +1,12 @@
-wallpaper-manager (2.0.9.0-5~ubuntu26.04.1) resolute; urgency=medium
+wallpaper-manager (2.0.9.0-6~ubuntu26.04.1) resolute; urgency=medium
+  * Up to date on wallpaper-con-citas, to (1.2.8).
+  * For render_guardado.py, the calculation is now performed automatically for the text box.
+  * Text contrast has been addressed for light images with black text (and vice versa). Additionally, a bug involving the shell call; `sh` was being used instead of `bash`: fixed.
+  * EN ESPAÑOL: aquí ↓
+  * Para render_guardado.py, hace el cálculo automático a la caja de texto.
+  * Ahora el contraste del texto en imágenes claras, con texto negro, y viceversa. Y, había un bug de el llamado en shell, con `sh` y correspondía `bash`: reparado.
+
+  
   * Just a little bug, on the installer, caused the nautilus script, files, omission: Fixed.
   * Add the file on rotative wallpaper, to history.
 
