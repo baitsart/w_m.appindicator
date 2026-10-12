@@ -93,7 +93,6 @@ sudo make install
 Use:
 The command line function « w-m --help »
 "
-cp -r /usr/share/wallpaper_manager/wall-manager/* /usr/share/wallpaper_manager/
 
 mkdir -p "$USER_HOME/.config/autostart"
 
