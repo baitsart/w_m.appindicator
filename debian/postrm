@@ -10,15 +10,13 @@ fi
 
 case "$1" in
     purge)
-        if [ -d /usr/share/wallpaper_manager ]; then  
             rm -rf /usr/share/wallpaper_manager
-        fi
-        if [ -d "$homedir/.wallpaper_manager" ]; then  
             rm -rf "$homedir/.wallpaper_manager"
-        fi
-        if [ -f "$homedir/.config/autostart/wm-app-indicador.desktop" ]; then  
-            rm "$homedir/.config/autostart/wm-app-indicador.desktop"
-        fi
+            rm -f "$homedir/.config/autostart/wm-app-indicador.desktop"
+            rm -f "$user_dir/.local/share/applications/wallpaper_con_citas.desktop"
+            rm -f "$user_dir/.local/share/applications/wallpaper_manager.desktop"
+            rm -f "$user_dir/.config/autostart/Ciclar_wallpaper_citas.desktop"
+            
     ;;
     remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
         # Acciones para remove normal
