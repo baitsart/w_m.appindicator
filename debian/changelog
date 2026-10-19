@@ -1,4 +1,21 @@
-wallpaper-manager (2.0.9.0-8~ubuntu26.04.1) resolute; urgency=medium
+wallpaper-manager (2.0.9.1~ubuntu26.04.1) resolute; urgency=medium
+
+  * A little bug in the postrm file, fixed.
+  * Up to date on wallpaper-con-citas, to (1.3.0) resolute; urgency=medium
+  * On final releases.
+  * Improvements: Tapping a URI that points to a local file in "OFFLINE", now opens it in the file browser.
+  * Fixed an issue with cycling (with or without an image).
+  * When cycling through options, if a text box has been designed, it uses the default font setting instead of the one specified in `fonts.config`.
+  * Starting the application without an internet connection no longer causes bugs; it simply loads in "OFFLINE" mode.
+
+  * EN ESPAÑOL: aquí ↓
+  * Un pequeño error en el archivo postrm, corregido.
+  * En las versiones finales.
+  * Mejoras: Ahora al tocar el uri, en archivo local en "OFFLINE", se abre en el navegador de archivos.
+  * Se reparó el ciclar, con o sin imagen.
+  * Que en el ciclar sin haber diseñado la caja de texto usa la cita por defecto, y debe usar la de fonts.config.
+  * Al iniciar sin internet, no da bugs, solo carga OFFLINE.
+
 
   * Up to date on wallpaper-con-citas, to (1.2.9).
   * Improvements have been made to a couple of details: if a user changes their background, the random cycling feature does not trigger immediately; instead, it waits for the established cycle interval.

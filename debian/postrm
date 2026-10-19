@@ -1,9 +1,6 @@
 #!/bin/sh
 set -e
 
-users=$( who | awk '{print $1}' | sed '/^root$/d' | uniq )
-homedir="/home/$users"
-
 if [ "$1" = "remove" ] || [ "$1" = "purge" ]; then
     killall -9 wm-app-indicador 2>/dev/null || true
 fi
@@ -11,12 +8,18 @@ fi
 case "$1" in
     purge)
             rm -rf /usr/share/wallpaper_manager
-            rm -rf "$homedir/.wallpaper_manager"
-            rm -f "$homedir/.config/autostart/wm-app-indicador.desktop"
-            rm -f "$user_dir/.local/share/applications/wallpaper_con_citas.desktop"
-            rm -f "$user_dir/.local/share/applications/wallpaper_manager.desktop"
-            rm -f "$user_dir/.config/autostart/Ciclar_wallpaper_citas.desktop"
             
+            if [ -d  /home ]; then
+                for homedir in /home/*; do
+                    if [ -d  "$homedir" ]; then
+                        rm -rf "$homedir/.wallpaper_manager"
+                        rm -f "$homedir/.config/autostart/wm-app-indicador.desktop"
+                        rm -f "$homedir/.local/share/applications/wallpaper_con_citas.desktop"
+                        rm -f "$homedir/.local/share/applications/wallpaper_manager.desktop"
+                        rm -f "$homedir/.config/autostart/Ciclar_wallpaper_citas.desktop"
+                    fi
+                done
+            fi
     ;;
     remove|upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
         # Acciones para remove normal
